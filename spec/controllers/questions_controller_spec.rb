@@ -1,15 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller, focus: true do
+RSpec.describe QuestionsController, type: :controller do
 
   let(:question) { create(:question) }
 
   describe "GET #index" do
     before { get :index }
 
-    it 'renders index view' do
-      expect(response).to render_template :index
-    end
+    it { should render_template :index }
 
     it 'populates an array of all questions' do
       questions = create_list(:question, 2)
@@ -20,9 +18,7 @@ RSpec.describe QuestionsController, type: :controller, focus: true do
   describe "GET #show" do
     before { get :show, id: question }
 
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
+    it { should render_template :show }
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -32,9 +28,7 @@ RSpec.describe QuestionsController, type: :controller, focus: true do
   describe "GET #new" do
     before { get :new }
 
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
+    it { should render_template :new }
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
