@@ -54,5 +54,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  resources :questions
+  resources :questions do
+    resources :answers, shallow: true, except: [:index, :show]
+  end
 end
