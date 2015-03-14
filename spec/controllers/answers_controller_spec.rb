@@ -23,12 +23,8 @@ RSpec.describe AnswersController, type: :controller do
 
       it { should redirect_to question }
 
-      it "saves new answer" do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by(1)
-      end
-
-      it "associates new answer with given question" do
-        expect(assigns(:answer).question).to eq question
+      it "saves new answer to given question" do
+        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(question.answers, :count).by(1)
       end
     end
 
