@@ -53,4 +53,8 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  resources :questions do
+    resources :answers, shallow: true, except: [:index, :show]
+  end
 end
