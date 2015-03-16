@@ -1,0 +1,4 @@
+- return unless target.errors.any?
+ul class="error_messages"
+  - target.errors.full_messages.each do |msg|
+    li = msg

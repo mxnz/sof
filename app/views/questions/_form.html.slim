@@ -1,0 +1,11 @@
+= form_for question do |f|
+  = render "shared/error_messages", target: question
+  div class="field"
+    = f.label       :title
+    = f.text_field  :title
+  div class="field"
+    = f.label       :body, 'Text'
+    = f.text_area   :body
+
+  div class="actions"
+    = f.submit 'Publish'
