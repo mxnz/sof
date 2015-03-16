@@ -1,2 +1,5 @@
 h1 = @question.title
 p = @question.body
+= link_to 'Answer', new_question_answer_path(@question)
+h2 Answers
+ul = render @question.answers

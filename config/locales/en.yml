@@ -24,3 +24,5 @@ en:
     attributes:
       question:
         body: 'Text'
+      answer:
+        body: 'Text'

@@ -1,16 +1,8 @@
 FactoryGirl.define do
 
-  sequence :title do |n|
-    "Question ##{n}"
-  end
-
-  sequence :body do |n|
-    "Text ##{n}"
-  end
-
   factory :question do
-    title
-    body
+    sequence(:title) { |n| "Question ##{n}" }
+    sequence(:body) { |n| "Text ##{n}" }
   end
 
   factory :invalid_question, class: "Question" do

@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find(params[:id])
+    @question = Question.includes(:answers).find(params[:id])
   end
 
   def create
