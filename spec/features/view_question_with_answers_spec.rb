@@ -6,10 +6,10 @@ RSpec.feature 'View question with its answers', %{
   I want to have ability to view a question with its answers
 }, type: :feature do
 
-  scenario 'User views question with its answers' do
-    question = create(:question)
-    answers = create_list(:answer, 2, question: question)
+  given!(:question) { create(:question) }
+  given!(:answers) { create_list(:answer, 2, question: question) }
 
+  scenario 'User views question with its answers' do
     visit questions_path
     click_on question.title
 

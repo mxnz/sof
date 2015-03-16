@@ -6,8 +6,9 @@ RSpec.feature 'View questions', %q{
   I want to have ability to view questions list
 }, type: :feature do
 
+  given!(:questions) { create_list(:question, 2) }
+
   scenario 'User views questions' do
-    questions = create_list(:question, 2)
     visit questions_path
 
     questions.each { |q| expect(page).to have_content q.title }
