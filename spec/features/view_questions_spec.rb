@@ -10,9 +10,6 @@ RSpec.feature 'View questions', %q{
     questions = create_list(:question, 2)
     visit questions_path
 
-    questions.each do |q|
-      expect(page).to have_content q.title
-      expect(page).to have_content q.body
-    end
+    questions.each { |q| expect(page).to have_content q.title }
   end
 end
