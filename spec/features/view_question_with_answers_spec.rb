@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature 'View question with its answers', %{
-  In order to find out answer
+  In order to find out the answer
   As an user
-  I want to have ability to view question with its answers
-}, type: :feature, focus: true do
+  I want to have ability to view a question with its answers
+}, type: :feature do
 
   scenario 'User views question with its answers' do
     question = create(:question)
