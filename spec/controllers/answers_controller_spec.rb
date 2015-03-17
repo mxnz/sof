@@ -43,4 +43,34 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe "DELETE #destroy" do
+    login_user
+
+    context 'own answer' do
+      let!(:answer) { create(:answer, user: subject.current_user) }
+
+      it do
+        delete :destroy, id: answer
+        should redirect_to answer.question
+      end
+
+      it 'removes one' do
+        expect { delete :destroy, id: answer }.to change(Answer, :count).by(-1)
+      end
+    end
+
+    context "an another user's answer" do
+      let!(:another_answer) { create(:answer) }
+
+      it do
+        delete :destroy, id: another_answer
+        should redirect_to another_answer.question
+      end
+
+      it "doesn't remove one" do
+        expect { delete :destroy, id: another_answer }.to_not change(Answer, :count)
+      end
+    end
+  end
+
 end
