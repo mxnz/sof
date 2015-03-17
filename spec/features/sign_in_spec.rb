@@ -10,7 +10,8 @@ RSpec.feature 'User can sign in', %q{
     sign_in(create(:user))
 
     expect(page).to have_content 'Signed in successfully'
-    expect(page).to have_link 'Log out'
+    expect(page).to_not have_selector(:link_or_button, 'Log in')
+    expect(page).to have_selector(:link_or_button, 'Log out')
     expect(current_path).to eq root_path
   end
 
