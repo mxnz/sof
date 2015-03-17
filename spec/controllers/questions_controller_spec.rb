@@ -35,6 +35,10 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
     end
+
+    it "assigns new question's user to current user" do
+      expect(assigns(:question).user).to eq subject.current_user
+    end
   end
 
   describe 'POST #create' do
@@ -47,7 +51,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'saves new question' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { post :create, question: attributes_for(:question) }.to change(subject.current_user.questions, :count).by(1)
       end
     end
 
@@ -59,6 +63,36 @@ RSpec.describe QuestionsController, type: :controller do
 
       it "doesn't save invalid question" do
         expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    login_user
+
+    context 'own question' do
+      let!(:question) { create(:question, user: subject.current_user) }
+
+      it "removes one" do
+        expect { delete :destroy, id: question }.to change(subject.current_user.questions, :count).by(-1)
+      end
+
+      it "redirects to index view" do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context "another user's question" do
+      let!(:question) { create(:question) }
+
+      it "doesn't remove one" do
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      end
+
+      it "redirects to index view" do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
       end
     end
   end

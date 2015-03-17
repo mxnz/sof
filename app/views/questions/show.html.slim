@@ -1,3 +1,5 @@
+= link_to('Remove Question', @question, method: :delete) if signed_in? && @question.user_id == current_user.id
+
 h1 = @question.title
 p = @question.body
 = link_to 'Answer', new_question_answer_path(@question)

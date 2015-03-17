@@ -6,7 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    @question = Question.new
+    @question = Question.new(user: current_user)
   end
 
   def show
@@ -15,12 +15,19 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.user = current_user
     if @question.save
       flash[:success] = 'Your question is published successfully.'
       redirect_to @question
     else
       render :new
     end
+  end
+
+  def destroy
+    @question = Question.find(params[:id])
+    @question.destroy if @question.user_id == current_user.id
+    redirect_to questions_path
   end
 
 
