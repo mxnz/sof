@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.feature '', %{
   In order to stop adding questions and answers
   As an authenticated user
-  I want to have ability to sign out
+  I want to be able to sign out
 }, type: :feature do
 
   given(:user) { create(:user) }
   
-  scenario 'Authenticated user sign out' do
+  scenario 'An authenticated user sign out' do
     sign_in(user)
     click_on 'Log out'
 

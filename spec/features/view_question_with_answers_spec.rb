@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.feature 'View question with its answers', %{
   In order to find out the answer
   As an user
-  I want to have ability to view a question with its answers
+  I want to be able to view a question with its answers
 }, type: :feature do
 
   given!(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 2, question: question) }
 
-  scenario 'User views question with its answers' do
+  scenario 'A user views a question with its answers' do
     visit questions_path
     click_on question.title
 

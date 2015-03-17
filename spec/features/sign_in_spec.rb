@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.feature 'User can sign in', %q{
   In order to write questions and answers
   As an user
-  I want to have ability to sign in
+  I want to be able to sign in
 }, type: :feature do
  
-  scenario 'Registered user tries to sign in' do
+  scenario 'A registered user sign in' do
     sign_in(create(:user))
 
     expect(page).to have_content 'Signed in successfully'
@@ -15,7 +15,7 @@ RSpec.feature 'User can sign in', %q{
     expect(current_path).to eq root_path
   end
 
-  scenario 'Non-registered user tries to sign in' do
+  scenario 'A non-registered user cannot sign in' do
     sign_in(build(:user))
 
     expect(page).to have_content 'Invalid email or password.'

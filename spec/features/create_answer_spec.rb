@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Create an answer', %{
   In order to help person, who asked a question,
   As an authenticated user
-  I want to have ability to write an answer to a question
+  I want to be able to write an answer to a question
 }, type: :feature do
 
   given(:user) { create(:user) }
@@ -22,7 +22,7 @@ RSpec.feature 'Create an answer', %{
     expect(page).to have_content answer.body
   end
 
-  scenario 'An authenticated user tries creating a blank answer' do
+  scenario 'An authenticated user cannot create a blank answer' do
     sign_in user
     visit question_path(question)
     click_on 'Answer'
@@ -31,7 +31,7 @@ RSpec.feature 'Create an answer', %{
     expect(page).to have_content "Text can't be blank"
   end
 
-  scenario 'A non-authenticated user tries creating an answer' do
+  scenario 'A non-authenticated user cannot create an answer' do
     visit question_path(question)
     click_on 'Answer'
 

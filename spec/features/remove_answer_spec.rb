@@ -19,7 +19,7 @@ RSpec.feature '', %{
     expect(current_path).to eq question_path(answer.question)
   end
 
-  scenario "A user can't remove an another user's answer" do
+  scenario "A user cannot remove an another user's answer" do
     sign_in(answer.user)
     visit question_path(another_answer.question)
 

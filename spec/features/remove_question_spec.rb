@@ -9,7 +9,7 @@ RSpec.feature 'Remove a question', %{
   given(:question) { create(:question) }
   given(:another_question) { create(:question) }
   
-  scenario 'An User removes his/her question' do
+  scenario 'A User removes his/her question' do
     sign_in(question.user)
     visit question_path(question)
 
@@ -17,7 +17,7 @@ RSpec.feature 'Remove a question', %{
     expect(current_path).to eq questions_path
   end
 
-  scenario "An user tries removing an another user's question" do
+  scenario "A user cannot remove an another user's question" do
     sign_in(question.user)
     visit question_path(another_question)
 

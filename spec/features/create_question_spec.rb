@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Create a question", %{
   In order to get an answer
   As an user
-  I want to have ability to ask a question
+  I want to be able to ask a question
 }, type: :feature do
 
   given(:user) { create(:user) }
@@ -21,7 +21,7 @@ RSpec.feature "Create a question", %{
     expect(page).to have_content question.body
   end
 
-  scenario 'An authenticated user tries creating a question without title or text' do
+  scenario 'An authenticated user cannot create an invalid question' do
     sign_in user
     click_on 'Ask Question'
     click_on 'Publish'
@@ -30,7 +30,7 @@ RSpec.feature "Create a question", %{
     expect(page).to have_content "Text can't be blank"
   end
 
-  scenario 'A Non-authenticated user tries creating a question' do
+  scenario 'A Non-authenticated user cannot create a question' do
     visit root_path
     click_on 'Ask Question'
 

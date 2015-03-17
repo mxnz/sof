@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.feature 'Guest sign up', %{
   In order to become an user
   As a guest
-  I want ot have ability to sign up
+  I want to be able to sign up
 }, type: :feature do
 
   given(:user) { build(:user) }
   
-  scenario 'Guest sign up' do
+  scenario 'A guest sign up' do
     visit root_path
     click_on 'Sign up'
     fill_in 'Email', with: user.email
@@ -21,7 +21,7 @@ RSpec.feature 'Guest sign up', %{
     expect(current_path).to eq root_path
   end
 
-  scenario 'Guest tries to sign up with invalid credentials' do
+  scenario 'A guest cannot sign up with invalid credentials' do
     visit root_path
     click_on 'Sign up'
     click_on 'Sign up'
