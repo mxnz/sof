@@ -7,19 +7,14 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<% if flash[:success] %>
-  <div class="success">
-    <%= flash[:success] %>
-  </div>
-<% elsif flash[:notice] %>
-  <div class="notice">
-    <%= flash[:notice] %>
-  </div>
-<% elsif flash[:error] %>
-  <div class="error">
-    <%= flash[:error] %>
-  </div>
+
+<%= link_to('Log in', new_user_session_path) if !signed_in? && !current_page?(new_user_session_path) %>
+<%= link_to('Log out', destroy_user_session_path, method: :delete) if signed_in? %>
+
+<% flash.each do |key, value| %>
+  <%= content_tag :div, value, class: "flash #{key}" %>
 <% end %>
+
 <%= yield %>
 
 </body>
