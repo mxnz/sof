@@ -26,6 +26,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe "GET #new" do
+    login_user
+
     before { get :new }
 
     it { should render_template :new }
@@ -36,6 +38,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    login_user
+
     context 'with valid attributes' do
       it 'redirects to show view' do
         post :create, question: attributes_for(:question)
@@ -57,7 +61,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
       end
     end
-
   end
 
 end
