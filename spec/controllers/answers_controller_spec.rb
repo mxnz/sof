@@ -4,6 +4,8 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
 
   describe "GET #new" do
+    login_user
+
     before { get :new, question_id: question }
 
     it { should render_template :new }
@@ -18,6 +20,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe "POST #create" do
+    login_user
+
     context 'with valid data' do
       before { post :create, question_id: question, answer: attributes_for(:answer) }
 
