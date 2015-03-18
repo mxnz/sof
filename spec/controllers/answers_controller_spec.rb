@@ -13,10 +13,6 @@ RSpec.describe AnswersController, type: :controller do
     it "assigns new answer to @answer" do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
-
-    it "associates given question with @answer" do
-      expect(assigns(:answer).question_id).to eq question.id
-    end
   end
 
   describe "POST #create" do

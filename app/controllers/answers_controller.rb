@@ -2,8 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @answer = Answer.new(question_id: params[:question_id])
-    @answer.user = current_user
+    @answer = Answer.new
   end
 
   def create
@@ -23,10 +22,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
-    if @answer.user_id == current_user.id
-      @answer.destroy!
-      flash[:success] = 'Your answer is removed'
-    end
+    flash[:success] = 'Your answer is removed' if @answer.user_id == current_user.id && @answer.destroy
     redirect_to question_path(@answer.question_id)
   end
 

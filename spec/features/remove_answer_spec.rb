@@ -16,6 +16,7 @@ RSpec.feature '', %{
     click_on 'Delete'
 
     expect(page).to have_content 'Your answer is removed'
+    expect(page).to_not have_content answer.body
     expect(current_path).to eq question_path(answer.question)
   end
 

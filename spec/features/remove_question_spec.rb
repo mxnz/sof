@@ -12,8 +12,9 @@ RSpec.feature 'Remove a question', %{
   scenario 'A User removes his/her question' do
     sign_in(question.user)
     visit question_path(question)
+    click_on 'Remove Question'
 
-    expect { click_on 'Remove Question' }.to change(question.user.questions, :count).by(-1)
+    expect(page).to_not have_content(question.title)
     expect(current_path).to eq questions_path
   end
 
