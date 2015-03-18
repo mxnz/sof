@@ -22,7 +22,9 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
-    flash[:success] = 'Your answer is removed' if @answer.user_id == current_user.id && @answer.destroy
+    if @answer.user_id == current_user.id
+      flash[:success] = 'Your answer is removed' if @answer.destroy!
+    end
     redirect_to question_path(@answer.question_id)
   end
 

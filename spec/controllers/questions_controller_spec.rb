@@ -37,7 +37,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it "assigns new question's user to current user" do
-      expect(assigns(:question).user).to eq subject.current_user
+      expect(assigns(:question).user).to eq current_user
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'saves new question' do
-        expect { post :create, question: attributes_for(:question) }.to change(subject.current_user.questions, :count).by(1)
+        expect { post :create, question: attributes_for(:question) }.to change(current_user.questions, :count).by(1)
       end
     end
 
@@ -71,10 +71,10 @@ RSpec.describe QuestionsController, type: :controller do
     login_user
 
     context 'own question' do
-      let!(:question) { create(:question, user: subject.current_user) }
+      let!(:question) { create(:question, user: current_user) }
 
       it "removes one" do
-        expect { delete :destroy, id: question }.to change(subject.current_user.questions, :count).by(-1)
+        expect { delete :destroy, id: question }.to change(current_user.questions, :count).by(-1)
       end
 
       it "redirects to index view" do
