@@ -1,12 +1,15 @@
 FactoryGirl.define do
+
   factory :answer do
-    body "Answer body."
+    user
     question
+    sequence(:body) { |n| "Answer ##{n}" }
   end
 
   factory :invalid_answer, class: "Answer" do
-    body nil
+    user
     question
+    body nil
   end
 
 end

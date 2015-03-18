@@ -1,0 +1,4 @@
+li
+  = answer.body
+  br
+  = link_to('Edit Answer', edit_answer_path(answer)) if signed_in? && answer.user_id == current_user.id
