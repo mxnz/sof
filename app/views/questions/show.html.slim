@@ -2,6 +2,10 @@
 
 h1 = @question.title
 p = @question.body
-= link_to 'Answer', new_question_answer_path(@question)
+div class="answer_controls"
+  = link_to('Answer', '#', 'data-action': 'create_answer') if signed_in?
+  div class="answer_form_wrapper" style="display:none"
+    = render 'answers/form', answer: Answer.new(question: @question)
 h2 Answers
-ul = render @question.answers
+ul class="answers"
+  = render @question.answers

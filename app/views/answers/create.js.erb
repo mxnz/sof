@@ -1,0 +1,3 @@
+$(".answers").html("<%= j render @answer.question.answers %>");
+$(".answer_controls [data-action='create_answer']").show();
+$(".answer_controls .answer_form_wrapper").hide().find("textarea").val('');
