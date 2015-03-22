@@ -59,6 +59,7 @@ RSpec.configure do |config|
   config.include FeaturesMacros, type: :feature
   config.include ControllerMacros, type: :controller
 
+  Capybara.javascript_driver = :webkit
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
