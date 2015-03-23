@@ -1,9 +1,15 @@
 = link_to('Remove Question', @question, method: :delete) if signed_in? && @question.user_id == current_user.id
 
 h1 = @question.title
-p = @question.body
+div class="question_body"
+  = @question.body
+div class="question_controls"
+  = link_to('Edit Question', '#', 'data-action': 'edit_question') if user_signed_in? && @question.user_id == current_user.id
+  div class="question_form_wrapper" style="display:none"
+    ul class="question_errors"
+    = render 'form', question: @question
 div class="answer_controls"
-  = link_to('Answer', '#', 'data-action': 'create_answer') if signed_in?
+  = link_to('Answer', '#', 'data-action': 'create_answer') if user_signed_in?
   div class="answer_form_wrapper" style="display:none"
     h2 Your Answer
     ul class="answer-errors"

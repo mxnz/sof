@@ -23,6 +23,11 @@ class QuestionsController < ApplicationController
       render :new
     end
   end
+  
+  def update
+    @question = Question.find(params[:id])
+    @question.update(question_params) if @question.user_id == current_user.id
+  end
 
   def destroy
     @question = Question.find(params[:id])

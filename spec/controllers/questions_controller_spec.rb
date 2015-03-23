@@ -66,6 +66,43 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+  
+  describe 'PATCH #update' do
+    login_user
+    let(:question) { create(:question, user: current_user) }
+    let(:another_question) { create(:question) }
+    let(:upd_question) { build(:question) }
+    
+    context 'own question' do
+      context 'with valid attributes' do
+        before { patch :update, id: question, question: upd_question.attributes, format: :js}
+
+        it { should render_template :update }
+
+        it 'updates a question' do
+          question.reload
+          expect([question.title, question.body]).to eq [upd_question.title, upd_question.body]
+        end
+      end
+
+      context 'with invalid attributes' do
+        before { patch :update, id: question, question: attributes_for(:invalid_question), format: :js }
+        
+        it { should render_template :update }
+
+        it 'does not update a question' do
+          expect(Question.find(question.id).attributes).to eq question.attributes
+        end
+      end
+    end
+    
+    context "an another user's question" do
+      before { patch :update, id: another_question, question: upd_question.attributes, format: :js }
+      it 'does not update that question' do
+        expect(Question.find(another_question.id).attributes).to eq another_question.attributes
+      end
+    end
+  end
 
   describe 'DELETE #destroy' do
     login_user
