@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
     @answer.user = current_user
     @answer.question_id = params[:question_id]
-    render :new unless @answer.save
+    @answer.save
   end
 
   def edit

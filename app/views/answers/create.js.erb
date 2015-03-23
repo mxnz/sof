@@ -1,3 +1,10 @@
-$(".answers").html("<%= j render @answer.question.answers %>");
-$(".answer_controls [data-action='create_answer']").show();
-$(".answer_controls .answer_form_wrapper").hide().find("textarea").val('');
+<% if @answer.errors.present? %>
+  $(".answer-errors").empty();
+  <% @answer.errors.full_messages.each do |msg| %>
+    $(".answer-errors").append("<li> <%= j msg %> </li>");
+  <% end %>
+<% else %>
+  $(".answers").html("<%= j render @answer.question.answers %>");
+  $(".answer_controls [data-action='create_answer']").show();
+  $(".answer_controls .answer_form_wrapper").hide().find("textarea").val('');
+<% end %>

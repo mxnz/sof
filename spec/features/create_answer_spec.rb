@@ -28,15 +28,15 @@ RSpec.feature 'Create an answer', %{
     expect(page).to_not have_field 'Text'
   end
 
- # scenario 'An authenticated user cannot create a blank answer' do
- #   sign_in user
- #   visit question_path(question)
- #   click_on 'Answer'
- #   click_on 'Publish'
+  scenario 'An authenticated user cannot create a blank answer' do
+    sign_in user
+    visit question_path(question)
+    click_on 'Answer'
+    click_on 'Publish'
 
- #   expect(page).to have_content "Text can't be blank"
- #   expect(current_path).to eq question_path(question)
- # end
+    expect(page).to have_content "Text can't be blank"
+    expect(current_path).to eq question_path(question)
+  end
 
   scenario 'A non-authenticated user cannot create an answer' do
     visit question_path(question)

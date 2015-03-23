@@ -17,12 +17,12 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid data' do
-      before { post :create, question_id: question, answer: attributes_for(:invalid_answer) }
+      before { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }
 
-      it { should render_template :new }
+      it { should render_template :create }
 
       it "doesn't save new answer" do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.to_not change(Answer, :count)
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
     end
   end
