@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature '', %{
   In order to fix an error

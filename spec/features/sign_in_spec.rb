@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature 'User can sign in', %q{
   In order to write questions and answers

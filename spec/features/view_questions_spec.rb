@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature 'View questions', %q{
   In order to find required question

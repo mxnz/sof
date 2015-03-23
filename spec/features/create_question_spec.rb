@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature "Create a question", %{
   In order to get an answer

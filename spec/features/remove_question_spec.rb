@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature 'Remove a question', %{
   In order to not bother a community
