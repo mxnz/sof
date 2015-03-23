@@ -12,7 +12,7 @@ div class="answer_controls"
   = link_to('Answer', '#', 'data-action': 'create_answer') if user_signed_in?
   div class="answer_form_wrapper" style="display:none"
     h2 Your Answer
-    ul class="answer-errors"
+    ul class="answer_errors"
     = render 'answers/form', answer: Answer.new(question: @question)
 h2 Answers
 ul class="answers"
