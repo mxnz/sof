@@ -110,26 +110,52 @@ RSpec.describe QuestionsController, type: :controller do
     context 'own question' do
       let!(:question) { create(:question, user: current_user) }
 
-      it "removes one" do
-        expect { delete :destroy, id: question }.to change(current_user.questions, :count).by(-1)
+      context 'by request with html format' do
+        it "removes one" do
+          expect { delete :destroy, id: question }.to change(current_user.questions, :count).by(-1)
+        end
+
+        it "redirects to index view" do
+          delete :destroy, id: question
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it "redirects to index view" do
-        delete :destroy, id: question
-        expect(response).to redirect_to questions_path
+      context 'by request with js format' do
+        it "removes one" do
+          expect { delete :destroy, id: question, format: :js }.to change(current_user.questions, :count).by(-1)
+        end
+
+        it "renders destroy template" do
+          delete :destroy, id: question, format: :js
+          should render_template :destroy
+        end
       end
     end
 
     context "another user's question" do
       let!(:question) { create(:question) }
 
-      it "doesn't remove one" do
-        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      context 'by request with html format' do
+        it "doesn't remove one" do
+          expect { delete :destroy, id: question }.to_not change(Question, :count)
+        end
+
+        it "redirects to index view" do
+          delete :destroy, id: question
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it "redirects to index view" do
-        delete :destroy, id: question
-        expect(response).to redirect_to questions_path
+      context 'by request with js format' do
+        it "doesn't remove one" do
+          expect { delete :destroy, id: question, format: :js }.to_not change(Question, :count)
+        end
+
+        it "renders destroy template" do
+          delete :destroy, id: question, format: :js
+          should render_template :destroy
+        end
       end
     end
   end
