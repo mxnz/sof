@@ -1,4 +1,4 @@
-= form_for question, remote: true do |f|
+= form_for question, remote: question.persisted? do |f|
   = render "shared/error_messages", target: question
   div class="field"
     = f.label       :title
@@ -9,5 +9,6 @@
 
   div class="actions"
     = f.submit 'Publish'
-    = link_to('Delete', question, method: :delete) if user_signed_in? && @question.user_id == current_user.id
+    - if question.persisted? && user_signed_in? && @question.user_id == current_user.id
+      = link_to('Delete', question, method: :delete) 
 
