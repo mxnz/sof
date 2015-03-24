@@ -9,3 +9,5 @@
 
   div class="actions"
     = f.submit 'Publish'
+    = link_to('Delete', question, method: :delete) if user_signed_in? && @question.user_id == current_user.id
+

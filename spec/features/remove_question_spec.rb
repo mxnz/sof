@@ -4,15 +4,16 @@ RSpec.feature 'Remove a question', %{
   In order to not bother a community
   As an author
   I want to be able to remove my question
-}, type: :feature do
+}, type: :feature, js: true do
 
   given(:question) { create(:question) }
   given(:another_question) { create(:question) }
   
-  scenario 'A User removes his/her question' do
+  scenario "A User removes his/her question" do
     sign_in(question.user)
     visit question_path(question)
-    click_on 'Remove Question'
+    click_on 'Edit'
+    click_on 'Delete'
 
     expect(page).to_not have_content(question.title)
     expect(current_path).to eq questions_path
@@ -22,6 +23,6 @@ RSpec.feature 'Remove a question', %{
     sign_in(question.user)
     visit question_path(another_question)
 
-    expect(page).to_not have_selector(:link_or_button, 'Remove Question')
+    expect(page).to_not have_selector(:link_or_button, 'Edit')
   end
 end

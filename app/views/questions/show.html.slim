@@ -1,5 +1,3 @@
-= link_to('Remove Question', @question, method: :delete) if signed_in? && @question.user_id == current_user.id
-
 h1 = @question.title
 div class="question_body"
   = @question.body
