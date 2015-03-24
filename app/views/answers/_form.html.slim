@@ -7,4 +7,4 @@
 
   div class="actions"
     = f.submit 'Publish'
-    = link_to('Delete', answer, method: :delete, remote: true) if answer.id
+    = link_to('Delete', answer, method: :delete, remote: true) if answer.persisted?
