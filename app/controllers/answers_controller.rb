@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_answer, only: [:edit, :update, :destroy]
 
   def create
     @answer = Answer.new(answer_params)
@@ -9,26 +10,24 @@ class AnswersController < ApplicationController
   end
 
   def edit
-    @answer = Answer.find(params[:id])
   end
 
   def update
-    @answer = Answer.find(params[:id])
     @answer.update(answer_params) if @answer.user_id == current_user.id 
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-    if @answer.user_id == current_user.id
-      flash[:success] = 'Your answer is removed' if @answer.destroy!
-    end
-    redirect_to question_path(@answer.question_id)
+    @answer.destroy! if @answer.user_id == current_user.id
   end
 
 
   private
     def answer_params
       params.require(:answer).permit(:body)
+    end
+
+    def load_answer
+      @answer = Answer.find(params[:id])
     end
 
 end
