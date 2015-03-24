@@ -1,11 +1,12 @@
+$("#answer_new .answer_errors").empty();
 <% if @answer.errors.present? %>
-  $(".answer_errors").empty();
-  <% @answer.errors.full_messages.each do |msg| %>
-    $(".answer_errors").append("<li> <%= j msg %> </li>");
-  <% end %>
+  $("#answer_new .answer_errors").html("<%=j render('shared/error_messages', target: @answer) %>");
 <% else %>
-  $(".answer_errors").empty();
-  $(".answers").html("<%= j render @answer.question.answers %>");
-  $(".answer_controls [data-action='create_answer']").show();
-  $(".answer_controls .answer_form_wrapper").hide().find("textarea").val('');
+  $(".answers").empty();
+  <% @answer.question.answers.each do |answer| %>
+    $(".answers").append("<li><%= j render answer %></li>");
+  <% end %>
+  $("#answer_new [data-action='create_answer']").show();
+  $("#answer_new h2").hide();
+  $("#answer_new form").hide().find("textarea").val('');
 <% end %>

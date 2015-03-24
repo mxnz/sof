@@ -1,4 +1,9 @@
-li
-  = answer.body
-  br
-  = link_to('Edit Answer', edit_answer_path(answer)) if signed_in? && answer.user_id == current_user.id
+- id = answer.new_record? ? 'new' : answer.id.to_s
+div class="answer" id="answer_#{id}"
+  div class="answer_body"
+    = answer.body
+  = link_to('Answer', '#', 'data-action': 'create_answer') if answer.new_record? && user_signed_in?
+  = link_to('Edit', '#', 'data-action': 'edit_answer') if user_signed_in? && answer.user_id == current_user.id
+  h2 style="display:none" Your answer
+  div class="answer_errors"
+  = render 'answers/form', answer: answer

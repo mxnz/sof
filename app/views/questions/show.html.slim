@@ -8,12 +8,8 @@ div class="question_controls"
   div class="question_form_wrapper" style="display:none"
     ul class="question_errors"
     = render 'form', question: @question
-div class="answer_controls"
-  = link_to('Answer', '#', 'data-action': 'create_answer') if user_signed_in?
-  div class="answer_form_wrapper" style="display:none"
-    h2 Your Answer
-    ul class="answer_errors"
-    = render 'answers/form', answer: Answer.new(question: @question)
+= render Answer.new(question: @question)
 h2 Answers
 ul class="answers"
-  = render @question.answers
+  - @question.answers.each do |answer|
+    li = render answer
