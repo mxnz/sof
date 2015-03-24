@@ -9,9 +9,6 @@ class AnswersController < ApplicationController
     @answer.save
   end
 
-  def edit
-  end
-
   def update
     @answer.update(answer_params) if @answer.user_id == current_user.id 
   end
