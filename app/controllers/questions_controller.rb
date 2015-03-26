@@ -26,12 +26,12 @@ class QuestionsController < ApplicationController
   
   def update
     @question = Question.find(params[:id])
-    @question.update(question_params) if @question.user_id == current_user.id
+    @question.update(question_params) if current_user.owns?(@question)
   end
 
   def destroy
     @question = Question.find(params[:id])
-    @question.destroy! if @question.user_id == current_user.id
+    @question.destroy! if current_user.owns?(@question)
     respond_to do |format|
       format.html { redirect_to questions_path }
       format.js

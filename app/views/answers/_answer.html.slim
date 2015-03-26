@@ -6,18 +6,18 @@ div class="answer" id="answer_#{id}"
     - best_true_style = (answer.best ? "" : "display:none")
     - best_false_style = (answer.best ? "display:none" : "")
     div class="answer_best_true" style=best_true_style
-      - if user_signed_in? && answer.question.user_id == current_user.id
+      - if current_user_owns?(answer.question)
         = link_to("\u2714", update_best_answer_path(answer, params: { answer: {best: false} }), method: :patch, remote: true)
       - else
         = "\u2714"
     div class="answer_best_false" style=best_false_style
-      - if user_signed_in? && answer.question.user_id == current_user.id
+      - if current_user_owns?(answer.question)
         = link_to("\u2B1C", update_best_answer_path(answer, params: { answer: {best: true} }), method: :patch, remote: true)
       - else
         = "\u2B1C"
 
   = link_to('Answer', '#', 'data-action': 'create_answer') if answer.new_record? && user_signed_in?
-  = link_to('Edit', '#', 'data-action': 'edit_answer') if user_signed_in? && answer.user_id == current_user.id
+  = link_to('Edit', '#', 'data-action': 'edit_answer') if current_user_owns?(answer)
   h2 style="display:none" Your answer
   div class="answer_errors"
   = render 'answers/form', answer: answer

@@ -2,7 +2,7 @@ h1 = @question.title
 div class="question_body"
   = @question.body
 div class="question_controls"
-  = link_to('Edit Question', '#', 'data-action': 'edit_question') if user_signed_in? && @question.user_id == current_user.id
+  = link_to('Edit Question', '#', 'data-action': 'edit_question') if current_user_owns?(@question)
   div class="question_form_wrapper" style="display:none"
     ul class="question_errors"
     = render 'form', question: @question

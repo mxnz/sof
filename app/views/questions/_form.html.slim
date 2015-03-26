@@ -9,6 +9,6 @@
 
   div class="actions"
     = f.submit 'Publish'
-    - if question.persisted? && user_signed_in? && @question.user_id == current_user.id
+    - if question.persisted? && current_user_owns?(@question)
       = link_to('Delete', question, method: :delete) 
 
