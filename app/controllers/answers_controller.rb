@@ -1,6 +1,5 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: [:update, :destroy]
 
   def create
     @answer = Answer.new(answer_params)
@@ -10,10 +9,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params) if @answer.user_id == current_user.id 
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params) if @answer.user_id == current_user.id
+  end
+
+  def update_best
+    @answer = Answer.includes(:question).find(params[:id])
+    @answer.update(best_param_only) if @answer.question.user_id == current_user.id
   end
 
   def destroy
+    @answer = Answer.find(params[:id])
     @answer.destroy! if @answer.user_id == current_user.id
   end
 
@@ -22,9 +28,8 @@ class AnswersController < ApplicationController
     def answer_params
       params.require(:answer).permit(:body)
     end
-
-    def load_answer
-      @answer = Answer.find(params[:id])
+    
+    def best_param_only
+      params.require(:answer).permit(:best)
     end
-
 end

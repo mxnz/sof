@@ -29,11 +29,11 @@ RSpec.describe AnswersController, type: :controller do
   
   describe "PATCH #update" do
     login_user
-    let(:answer) { create(:answer, user: current_user) }
-    let(:another_answer) { create(:answer) }
     let(:upd_answer) { build(:answer) }
 
     context 'own answer' do
+      let(:answer) { create(:answer, user: current_user) }
+
       context 'with valid data' do
         before { patch :update, id: answer, answer: upd_answer.attributes, format: :js }
         
@@ -56,12 +56,33 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context "another user's answer" do
+      let(:another_answer) { create(:answer) }
+
       before { patch :update, id: another_answer, answer: upd_answer.attributes, format: :js }
 
       it "doesn't update answer" do
         another_answer.reload
 
         expect(another_answer.body).to_not eq upd_answer.body
+      end
+    end
+    
+    context "the best flag for another user's answer"  do
+      context "by question's author" do
+        let!(:question) { create(:question, user: current_user) }
+        let!(:answer) { create(:answer, question: question) }
+
+        it "updates the best flag for that answer" do
+          expect { patch :update_best, id: answer, answer: { best: true }, format: :js }.to change { answer.reload.best }.from(false).to(true)
+        end
+      end
+      
+      context "by user, who is not a question's author" do
+        let(:another_answer) { create(:answer) }
+        
+        it "doesn't update best flag for that answer" do
+          expect { patch :update_best, id: another_answer, answer: { best: true }, format: :js }.to_not change { another_answer.reload.best }
+        end
       end
     end
   end

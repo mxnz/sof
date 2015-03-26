@@ -4,12 +4,14 @@ FactoryGirl.define do
     user
     question
     sequence(:body) { |n| "Answer ##{n}" }
+    best false
   end
 
   factory :invalid_answer, class: "Answer" do
     user
     question
     body nil
+    best false
   end
 
 end

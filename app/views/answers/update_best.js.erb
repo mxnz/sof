@@ -1,0 +1,4 @@
+$(".answers").empty();
+<% @answer.question.answers.each do |answer| %>
+  $(".answers").append("<li><%=j render answer %></li>");
+<% end %>
