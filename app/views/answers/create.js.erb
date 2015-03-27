@@ -2,10 +2,7 @@ $("#answer_new .answer_errors").empty();
 <% if @answer.errors.present? %>
   $("#answer_new .answer_errors").html("<%=j render('shared/error_messages', target: @answer) %>");
 <% else %>
-  $(".answers").empty();
-  <% @answer.question.answers.each do |answer| %>
-    $(".answers").append("<li><%= j render answer %></li>");
-  <% end %>
+  $(".answers").html("<%=j render 'answers', answers: @question.answers %>");
   $("#answer_new [data-action='create_answer']").show();
   $("#answer_new h2").hide();
   $("#answer_new form").hide().find("textarea").val('');

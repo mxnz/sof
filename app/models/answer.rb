@@ -7,7 +7,6 @@ class Answer < ActiveRecord::Base
 
   private
     def ensure_the_best_is_unique
-      answers = Answer.where(question_id: self.question_id, best: true)
-      answers.each { |a| a.update(best: false) if a.id != self.id }
+      Answer.where(question_id: question_id, best: true).update_all(best: false)
     end
 end

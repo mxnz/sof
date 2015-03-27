@@ -1,5 +1,5 @@
 - target = answer.id ? answer : [answer.question, answer]
-= form_for target, html: { style: "display:none" }, remote: true do |f|
+= form_for target, remote: true do |f|
 
   div class="field"
     = f.label :body

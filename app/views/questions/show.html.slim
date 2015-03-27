@@ -8,6 +8,4 @@ div class="question_controls"
     = render 'form', question: @question
 = render Answer.new(question: @question)
 h2 Answers
-ul class="answers"
-  - @question.answers.each do |answer|
-    li = render answer
+ul class="answers" = render 'answers/answers', answers: @question.answers

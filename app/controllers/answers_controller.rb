@@ -2,10 +2,8 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = Answer.new(answer_params)
-    @answer.user = current_user
-    @answer.question_id = params[:question_id]
-    @answer.save
+    @question = Question.find(params[:question_id])
+    @answer = Answer.create(answer_params.merge(user: current_user, question: @question))
   end
 
   def update
@@ -16,6 +14,7 @@ class AnswersController < ApplicationController
   def update_best
     @answer = Answer.includes(:question).find(params[:id])
     @answer.update(best_param_only) if current_user.owns?(@answer.question)
+    @question = @answer.question
   end
 
   def destroy

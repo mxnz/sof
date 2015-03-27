@@ -10,8 +10,8 @@ RSpec.feature 'Select best answer', %{
   given!(:another_question) { create(:question) }
 
   before do
-    3.times { create(:answer, question: question, user: question.user) }
-    2.times { create(:answer, question: another_question, user: another_question.user) }
+    create_list(:answer, 3, question: question, user: question.user)
+    create_list(:answer, 2, question: another_question, user: another_question.user)
   end
 
   scenario 'A question author selects the best answer' do
