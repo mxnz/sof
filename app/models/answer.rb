@@ -3,7 +3,7 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   validates :user, :question, :body, presence: true
 
-  before_save :ensure_the_best_is_unique, if: :best?
+  before_save :ensure_the_best_is_unique, if: ->() { best? && best_changed? }
 
   private
     def ensure_the_best_is_unique
