@@ -1,4 +1,23 @@
-li
-  = answer.body
-  br
-  = link_to('Edit Answer', edit_answer_path(answer)) if signed_in? && answer.user_id == current_user.id
+- id = answer.new_record? ? 'new' : answer.id.to_s
+div class="answer" id="answer_#{id}"
+  div class="answer_body"
+    = answer.body
+  - if answer.persisted?
+    - if answer.best?
+      div class="answer_best_true" 
+        - if current_user_owns?(answer.question)
+          = link_to "\u2714", update_best_answer_path( answer, answer: { best: false } ), method: :patch, remote: true 
+        - else
+          = "\u2714"
+    - else
+      div class="answer_best_false" 
+        - if current_user_owns?(answer.question)
+          = link_to "\u2B1C", update_best_answer_path( answer, answer: {best: true} ), method: :patch, remote: true
+        - else
+          = "\u2B1C"
+
+  = link_to('Answer', '#', data: { action: 'create_answer' }) if answer.new_record? && user_signed_in?
+  = link_to('Edit', '#', data: { action: 'create_answer' }) if current_user_owns?(answer)
+  h2 Your answer
+  div class="answer_errors"
+  = render 'answers/form', answer: answer

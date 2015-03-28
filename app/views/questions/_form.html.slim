@@ -1,4 +1,4 @@
-= form_for question do |f|
+= form_for question, remote: question.persisted? do |f|
   = render "shared/error_messages", target: question
   div class="field"
     = f.label       :title
@@ -9,3 +9,6 @@
 
   div class="actions"
     = f.submit 'Publish'
+    - if question.persisted? && current_user_owns?(@question)
+      = link_to('Delete', question, method: :delete) 
+

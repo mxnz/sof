@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature 'View question with its answers', %{
   In order to find out the answer

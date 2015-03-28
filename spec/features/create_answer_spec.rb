@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature 'Create an answer', %{
   In order to help a person, who asked a question,
@@ -34,7 +34,7 @@ RSpec.feature 'Create an answer', %{
     click_on 'Answer'
     click_on 'Publish'
 
-    # expect(page).to have_content "Text can't be blank"
+    expect(page).to have_content "Text can't be blank"
     expect(current_path).to eq question_path(question)
   end
 

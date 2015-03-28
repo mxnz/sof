@@ -1,6 +1,5 @@
 - target = answer.id ? answer : [answer.question, answer]
 = form_for target, remote: true do |f|
-  = render 'shared/error_messages', target: answer
 
   div class="field"
     = f.label :body
@@ -8,4 +7,4 @@
 
   div class="actions"
     = f.submit 'Publish'
-    = link_to('Delete', answer, method: :delete) if answer.id
+    = link_to('Delete', answer, method: :delete, remote: true) if answer.persisted?

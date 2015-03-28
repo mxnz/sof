@@ -1,10 +1,10 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 RSpec.feature "Create a question", %{
   In order to get an answer
   As an user
   I want to be able to ask a question
-}, type: :feature do
+}, type: :feature, js: true do
 
   given(:user) { create(:user) }
   given(:question) { build(:question) }
