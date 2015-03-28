@@ -12,11 +12,9 @@ RSpec.describe Answer, type: :model do
     answer = create(:answer)
     another_answer = create(:answer, question: answer.question, best: true)
 
-    answer.best = true
-    answer.save
-    another_answer.reload
+    answer.update!(best: true)
 
     expect(answer.best).to eq true
-    expect(another_answer.best).to eq false
+    expect(another_answer.reload.best).to eq false
   end
 end
