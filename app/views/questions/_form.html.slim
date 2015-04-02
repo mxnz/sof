@@ -1,4 +1,4 @@
-= form_for question, remote: question.persisted? do |f|
+= nested_form_for question, remote: question.persisted? do |f|
   = render "shared/error_messages", target: question
   div class="field"
     = f.label       :title
@@ -6,6 +6,14 @@
   div class="field"
     = f.label       :body
     = f.text_area   :body
+
+  div class="attachment_controls"
+    = f.fields_for :attachments do |a|
+      div class="field"
+        = a.label :file
+        = a.file_field :file
+      = a.link_to_remove 'Remove attachment'
+    = f.link_to_add 'Attach file', :attachments
 
   div class="actions"
     = f.submit 'Publish'

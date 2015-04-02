@@ -27,6 +27,12 @@ gem 'slim-rails'
 
 gem 'devise'
 
+gem 'carrierwave'
+
+gem 'nested_form'
+
+gem 'remotipart'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
