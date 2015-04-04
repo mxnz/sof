@@ -7,16 +7,9 @@
     = f.label       :body
     = f.text_area   :body
 
-  div class="attachment_controls"
-    = f.fields_for :attachments do |a|
-      div class="field"
-        = a.label :file
-        = a.file_field :file
-      = a.link_to_remove 'Remove attachment'
-    = f.link_to_add 'Attach file', :attachments
-
+  = render 'attachments/attachment_controls', form: f
+ 
   div class="actions"
     = f.submit 'Publish'
     - if question.persisted? && current_user_owns?(@question)
       = link_to('Delete', question, method: :delete) 
-

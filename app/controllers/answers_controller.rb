@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = Answer.create(answer_params.merge(user: current_user, question: @question))
+    @question = Question.includes(answers: [:attachments]).find(params[:question_id]) if @answer.errors.empty?
   end
 
   def update
@@ -25,7 +26,7 @@ class AnswersController < ApplicationController
 
   private
     def answer_params
-      params.require(:answer).permit(:body)
+      params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
     end
     
     def best_param_only

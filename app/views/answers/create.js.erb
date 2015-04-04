@@ -1,8 +1,8 @@
 $("#answer_new .answer_errors").empty();
 <% if @answer.errors.present? %>
-  $("#answer_new .answer_errors").html("<%=j render('shared/error_messages', target: @answer) %>");
+  $("#answer_new .answer_errors").html("<%= j_render 'shared/error_messages', target: @answer %>");
 <% else %>
-  $(".answers").html("<%=j render 'answers', answers: @question.answers %>");
+  $(".answers").html("<%= j_render 'answers', answers: @question.answers %>");
   $("#answer_new [data-action='create_answer']").show();
   $("#answer_new h2").hide();
   $("#answer_new form").hide().find("textarea").val('');

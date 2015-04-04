@@ -1,9 +1,11 @@
 - target = answer.id ? answer : [answer.question, answer]
-= form_for target, remote: true do |f|
+= nested_form_for target, remote: true do |f|
 
   div class="field"
     = f.label :body
     = f.text_area :body
+
+  = render 'attachments/attachment_controls', form: f
 
   div class="actions"
     = f.submit 'Publish'
