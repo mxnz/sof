@@ -1,6 +1,8 @@
 - target = answer.id ? answer : [answer.question, answer]
 = nested_form_for target, remote: true do |f|
 
+  = render "shared/error_messages", target: answer
+
   div class="field"
     = f.label :body
     = f.text_area :body

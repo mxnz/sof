@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
   end
   
   def update
-    @question = Question.find(params[:id])
+    @question = Question.includes(:user, :attachments).find(params[:id])
     @question.update(question_params) if current_user.owns?(@question)
   end
 

@@ -1,7 +1,10 @@
 $(function() {
-  $(".question_controls [data-action='edit_question']").click(function(e) {
+  function showQuestionForm(e) {
     e.preventDefault();
-    $(this).hide();
-    $(".question_controls .question_form_wrapper").show();
-  });
+    var target = $(this);
+    target.hide();
+    $(".question_controls .question_form_wrapper").html(target.data("form"));
+  }
+
+  $("body").on('click', '.question_controls [data-action="edit_question"]', showQuestionForm);
 });

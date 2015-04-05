@@ -1,11 +1,7 @@
-var parent = $("#answer_" + "<%= @answer.id %>");
-parent.find(".answer_errors").empty();
+var elem = $("#answer_" + "<%= @answer.id %>");
 <% if @answer.errors.present? %>
-  parent.find(".answer_errors").html("<%= j_render 'shared/error_messages', target: @answer %>");
+  elem.find(".error_messages").
+    replaceWith("<%= j_render 'shared/error_messages', target: @answer %>");
 <% else %>
-  parent.find("[data-action='edit_answer']").show();
-  parent.find("h2").hide();
-  parent.find("form").hide();
-  parent.find(".answer_body").html("<%=j @answer.body %>");
-  parent.find(".attachments").html("<%= j_render @answer.attachments %>")
+  elem.replaceWith("<%= j_render @answer %>");
 <% end %>

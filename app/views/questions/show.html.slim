@@ -1,12 +1,6 @@
-h1 = @question.title
-div class="question_body"
-  = @question.body
-ul class="attachments" = render @question.attachments
-div class="question_controls"
-  = link_to('Edit Question', '#', data: { action: 'edit_question' }) if current_user_owns?(@question)
-  div class="question_form_wrapper" 
-    ul class="question_errors"
-    = render 'form', question: @question
+div class="nested_form_blueprint"
+  = render 'answers/form', answer: Answer.new(question: @question)
+= render @question    
 = render Answer.new(question: @question)
 h2 Answers
-ul class="answers" = render 'answers/answers', answers: @question.answers
+= render 'answers/answers', answers: @question.answers
