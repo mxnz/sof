@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.includes(:answers, :attachments).find(params[:id])
+    @question = Question.includes(:attachments, answers: [:attachments]).find(params[:id])
   end
 
   def create
@@ -40,6 +40,7 @@ class QuestionsController < ApplicationController
 
 
   private
+
     def question_params
       params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
     end
