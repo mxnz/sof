@@ -1,7 +1,10 @@
 div class="attachment_controls"
   = form.fields_for :attachments do |a|
-    div class="field"
-      = a.label :file
-      = a.file_field :file
-    = a.link_to_remove 'Remove attachment'
+    - if a.object.new_record?
+      div class="field"
+        = a.label :file
+        = a.file_field :file
+    - else
+      div class="attachment_in_form" = a.object.file.identifier
+    = a.link_to_remove 'Remove file'
   = form.link_to_add 'Attach file', :attachments
