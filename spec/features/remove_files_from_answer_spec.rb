@@ -4,7 +4,7 @@ RSpec.feature 'Remove files from an answer', %{
   In order to fix an error
   As an answer author
   I want to be able to remove files from my answer
-}, type: :feature, js: true, focus: true do
+}, type: :feature, js: true do
   
   given!(:answer) { create(:answer) }
   given!(:attachment) { create(:attachment, attachable: answer) }

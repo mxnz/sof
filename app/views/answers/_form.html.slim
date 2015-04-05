@@ -12,3 +12,4 @@
   div class="actions"
     = f.submit 'Publish'
     = link_to('Delete', answer, method: :delete, remote: true) if answer.persisted?
+    = link_to 'Cancel', '#', data: { action: 'cancel_edit_answer' }
