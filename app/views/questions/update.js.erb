@@ -1,12 +1,5 @@
 <% if @question.errors.present? %>
-  $(".question_errors").empty();
-  <% @question.errors.full_messages.each do |msg| %>
-    $(".question_errors").append("<li> <%= j msg %> </li>");
-  <% end %>
+  $(".question .error_messages").replaceWith("<%= j_render 'shared/error_messages', target: @question %>");
 <% else %>
-  $(".question_errors").empty();
-  $("h1").html("<%= j @question.title %>");
-  $(".question_body").html("<%= j @question.body %>");
-  $(".question_controls [data-action='edit_question']").show();
-  $(".question_controls .question_form_wrapper").hide();
+  $(".question").replaceWith("<%= j_render @question %>");
 <% end %>

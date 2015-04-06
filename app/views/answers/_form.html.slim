@@ -1,10 +1,15 @@
 - target = answer.id ? answer : [answer.question, answer]
-= form_for target, remote: true do |f|
+= nested_form_for target, remote: true do |f|
+
+  = render "shared/error_messages", target: answer
 
   div class="field"
     = f.label :body
     = f.text_area :body
 
+  = render 'attachments/attachment_controls', form: f
+
   div class="actions"
     = f.submit 'Publish'
     = link_to('Delete', answer, method: :delete, remote: true) if answer.persisted?
+    = link_to 'Cancel', '#', data: { action: 'cancel_edit_answer' }

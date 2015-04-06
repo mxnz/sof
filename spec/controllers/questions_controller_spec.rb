@@ -53,6 +53,12 @@ RSpec.describe QuestionsController, type: :controller do
       it 'saves new question' do
         expect { post :create, question: attributes_for(:question) }.to change(current_user.questions, :count).by(1)
       end
+      
+      it 'saves new attachments' do
+        post :create, question: attributes_for(:question).merge(attachments_attributes: attributes_for_list(:attachment, 2)) 
+        expect(current_user.questions.last.attachments.count).to eq 2
+      end
+      
     end
 
     context 'with invalid attributes' do
@@ -82,6 +88,12 @@ RSpec.describe QuestionsController, type: :controller do
         it 'updates a question' do
           question.reload
           expect([question.title, question.body]).to eq [upd_question.title, upd_question.body]
+        end
+
+        it 'saves new attachments' do
+          patch :update, id: question, question: attributes_for(:question).merge(
+            attachments_attributes: attributes_for_list(:attachment, 2)), format: :js 
+          expect(question.attachments.count).to eq 2
         end
       end
 

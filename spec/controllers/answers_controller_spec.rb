@@ -12,7 +12,14 @@ RSpec.describe AnswersController, type: :controller do
       it { should render_template :create }
 
       it "saves new answer to given question" do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.
+          to change(question.answers, :count).by(1)
+      end
+
+      it "saves new attachments" do
+        post :create, question_id: question, answer: attributes_for(:answer).
+          merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :js
+        expect(question.answers.order(:created_at).last.attachments.count).to eq 2
       end
     end
 
@@ -42,6 +49,12 @@ RSpec.describe AnswersController, type: :controller do
         it "updates that answer" do
           answer.reload
           expect(answer.body).to eq upd_answer.body
+        end
+
+        it "saves new attachments" do
+          patch :update, id: answer, answer: upd_answer.attributes.
+            merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :js
+          expect(answer.attachments.count).to eq 2
         end
       end
 

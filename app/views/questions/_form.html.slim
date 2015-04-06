@@ -1,4 +1,4 @@
-= form_for question, remote: question.persisted? do |f|
+= nested_form_for question, remote: question.persisted? do |f|
   = render "shared/error_messages", target: question
   div class="field"
     = f.label       :title
@@ -7,8 +7,10 @@
     = f.label       :body
     = f.text_area   :body
 
+  = render 'attachments/attachment_controls', form: f
+ 
   div class="actions"
     = f.submit 'Publish'
     - if question.persisted? && current_user_owns?(@question)
       = link_to('Delete', question, method: :delete) 
-
+    = link_to 'Cancel', questions_path, data: { action: 'cancel_edit_question' }

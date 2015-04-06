@@ -1,16 +1,22 @@
 $(function() {
   function showAnswerForm(e) {
-    var target = $(e.target);
-    var action = target.data('action');
-    if (action !== 'create_answer' && action !== 'edit_answer') {
-      return;
-    }
     e.preventDefault();
+    var target = $(e.target);
+    var form = target.data("form");
     target.hide();
     var parent = target.parent(".answer");
-    parent.find("h2").show();
-    parent.find("form").show();
+    parent.find(".answer_form_wrapper").html(form);
   }
-  $(".answer [data-action='create_answer']").click(showAnswerForm);
-  $(".answers").click(showAnswerForm);
+
+  function hideAnswerForm(e) {
+    e.preventDefault();
+    var parentElem = $(e.target).parentsUntil('body', '.answer');
+    parentElem.find('[data-action="new_answer"]').show();
+    parentElem.find('[data-action="edit_answer"]').show();
+    parentElem.find(".answer_form_wrapper").empty();
+  }
+  
+  $("body").on("click", '#answer_new [data-action="new_answer"]', showAnswerForm);
+  $("body").on("click", '.answers .answer [data-action="edit_answer"]', showAnswerForm);
+  $("body").on("click", '.answer [data-action="cancel_edit_answer"]', hideAnswerForm);
 });

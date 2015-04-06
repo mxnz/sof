@@ -1,3 +1,8 @@
-li id="question_#{question.id}"
-  h2 = link_to question.title, question
-  = link_to 'Delete', question, method: :delete, remote: true if current_user_owns?(question)
+div class="question"
+  h1 = question.title
+  div class="question_body" = question.body
+  ul class="attachments" = render question.attachments
+
+  div class="question_controls"
+    = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if current_user_owns?(@question)
+    div class="question_form_wrapper" 
