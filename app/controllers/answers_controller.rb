@@ -2,9 +2,8 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = Answer.create(answer_params.merge(user: current_user, question: @question))
-    @question = find_question(params[:question_id]) if @answer.errors.empty?
+    @question = find_question(params[:question_id])
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
   end
 
   def update
