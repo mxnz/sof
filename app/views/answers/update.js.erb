@@ -1,7 +1,0 @@
-var elem = $("#answer_" + "<%= @answer.id %>");
-<% if @answer.errors.present? %>
-  elem.find(".error_messages").
-    replaceWith("<%= j_render 'shared/error_messages', target: @answer %>");
-<% else %>
-  elem.replaceWith("<%= j_render @answer %>");
-<% end %>

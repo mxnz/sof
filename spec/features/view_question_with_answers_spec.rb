@@ -4,12 +4,12 @@ RSpec.feature 'View question with its answers', %{
   In order to find out the answer
   As an user
   I want to be able to view a question with its answers
-}, type: :feature do
+}, type: :feature, js: true do
 
   given!(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 2, question: question) }
 
-  scenario 'A user views a question with its answers' do
+  scenario 'A non-authenticated user views a question with its answers' do
     visit questions_path
     click_on question.title
 

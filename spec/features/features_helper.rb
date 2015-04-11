@@ -6,6 +6,7 @@ RSpec.configure do |config|
   config.include FeaturesMacros, type: :feature
 
   Capybara.javascript_driver = :webkit
+  Capybara.default_wait_time = 5
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

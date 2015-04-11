@@ -6,8 +6,8 @@ RSpec.feature 'Remove a question', %{
   I want to be able to remove my question
 }, type: :feature, js: true do
 
-  given(:question) { create(:question) }
-  given(:another_question) { create(:question) }
+  given!(:question) { create(:question) }
+  given!(:another_question) { create(:question) }
 
   before { sign_in(question.user) }
   

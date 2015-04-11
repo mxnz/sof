@@ -33,6 +33,8 @@ gem 'nested_form'
 
 gem 'remotipart'
 
+gem 'lodash-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
