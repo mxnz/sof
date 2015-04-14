@@ -30,6 +30,13 @@ RSpec.describe Vote, type: :model do
         expect { vote.save! }.to raise_error(ActiveRecord::RecordNotUnique)
       end
     end
+
+    context 'when user try to vote for his own question' do
+      before { vote.user = question.user }
+      it 'should not be valid' do
+        expect(vote).to_not be_valid
+      end
+    end
   end
 
   context 'destroying a vote' do

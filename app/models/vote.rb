@@ -6,11 +6,18 @@ class Vote < ActiveRecord::Base
 
   validates :user, :votable, presence: true
   validates :up, inclusion: { in: [false, true] }
-
+  validate :user_cannot_vote_for_himself
+ 
   before_create :change_rating
   before_destroy :rollback_rating
 
   private
+    def user_cannot_vote_for_himself
+      if votable && user_id == votable.user_id
+        errors.add(:user, "can't vote for himself")
+      end
+    end
+
     def change_rating
       klass = Object.const_get votable_type
       if up?

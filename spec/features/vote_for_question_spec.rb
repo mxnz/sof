@@ -8,6 +8,7 @@ RSpec.feature 'Voting for a questions', %{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
+  given(:own_question) { create(:question, user: user) }
 
   scenario 'An authenticated user votes for a question' do
     sign_in user
@@ -27,11 +28,25 @@ RSpec.feature 'Voting for a questions', %{
     end
   end
 
-  scenario 'An authenticated user votes against a questin' do
+  scenario 'An authenticated user votes against a question' do
     
   end
 
   scenario 'An authenticated user remove his vote for a question' do
 
+  end
+  
+  scenario 'An authenticated user cannot vote for his own question' do
+    sign_in user
+    visit question_path(own_question)
+    within ".question" do
+      within ".rating" do
+        expect(page).to have_content("0")
+      end
+
+      expect(page).to_not have_selector(:link_or_button, 'vote up')
+      expect(page).to_not have_selector(:link_or_button, 'vote down')
+      expect(page).to_not have_selector(:link_or_button, 'remove vote')
+    end
   end
 end
