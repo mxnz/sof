@@ -1,0 +1,2 @@
+var votableElem = $(".votable[data-votable=<%= @votable.class.name + '_' + @votable.id.to_s %>]");
+votableElem.replaceWith("<%=j_render 'votes/votable', votable: @votable %>");

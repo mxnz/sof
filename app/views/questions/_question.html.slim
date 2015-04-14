@@ -2,7 +2,7 @@ div class="question"
   h1 = question.title
   div class="question_body" = question.body
   ul class="attachments" = render question.attachments
-
+  div class="votable_wrapper" = render 'votes/votable', votable: question
   div class="question_controls"
     = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if current_user_owns?(@question)
     div class="question_form_wrapper" 

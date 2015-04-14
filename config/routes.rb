@@ -62,4 +62,6 @@ Rails.application.routes.draw do
       patch :update_best, on: :member
     end
   end
+
+  resources :votes, only: [:create, :destroy]
 end
