@@ -29,11 +29,40 @@ RSpec.feature 'Voting for a questions', %{
   end
 
   scenario 'An authenticated user votes against a question' do
-    
+    sign_in user
+    visit question_path(question)
+    within '.question' do
+      within '.rating' do
+        expect(page).to have_content("0")
+      end
+      click_on 'vote down'
+
+      expect(page).to_not have_selector(:link_or_button, 'vote up')
+      expect(page).to_not have_selector(:link_or_button, 'vote down')
+      expect(page).to have_selector(:link_or_button, 'remove vote')
+      within ".rating" do
+        expect(page).to have_content("-1")
+      end
+    end
   end
 
-  scenario 'An authenticated user remove his vote for a question' do
+  scenario 'An authenticated user removes his vote for a question' do
+    vote = create(:vote, votable: question)
+    sign_in vote.user
+    visit question_path(question)
+    within '.question' do
+      within '.rating' do
+        expect(page).to have_content("1")
+      end
+      click_on 'remove vote'
 
+      expect(page).to have_selector(:link_or_button, 'vote up')
+      expect(page).to have_selector(:link_or_button, 'vote down')
+      expect(page).to_not have_selector(:link_or_button, 'remove vote')
+      within ".rating" do
+        expect(page).to have_content("0")
+      end
+    end
   end
   
   scenario 'An authenticated user cannot vote for his own question' do
