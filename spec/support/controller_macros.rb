@@ -6,7 +6,7 @@ module ControllerMacros
 
 
   def current_user
-    subject.current_user
+    controller.current_user
   end
 
   def login(user)
