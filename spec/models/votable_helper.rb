@@ -25,8 +25,13 @@ RSpec.shared_examples "a votable" do
 
     context 'when exist another vote from the same user and the same votable' do
       before { create(:vote, user: vote.user, votable: vote.votable) }
-      it 'saving vote should not be successfull' do
-        expect { vote.save! }.to raise_error(ActiveRecord::RecordNotUnique)
+
+      it "its vote should not be valid" do
+        expect(vote).to_not be_valid
+      end
+
+      it 'saving vote without validation should not be successfull' do
+        expect { vote.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
       end
     end
 
@@ -61,4 +66,3 @@ RSpec.shared_examples "a votable" do
   end
 
 end
-

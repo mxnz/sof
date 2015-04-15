@@ -6,8 +6,9 @@ class Vote < ActiveRecord::Base
 
   validates :user, :votable, presence: true
   validates :up, inclusion: { in: [false, true] }
+  validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
   validate :user_cannot_vote_for_himself
- 
+
   before_create :change_rating
   before_destroy :rollback_rating
 
