@@ -1,11 +1,12 @@
 require 'rails_helper'
+require_relative 'votable_helper'
 
 RSpec.describe Answer, type: :model do
+  it_behaves_like 'a votable'
+
   it { should belong_to :user }
   it { should belong_to :question }
   it { should have_many(:attachments).dependent(:destroy) }
-  it { should have_many(:votes).dependent(:destroy) }
-  it { should have_readonly_attribute :rating }
 
   it { should validate_presence_of :user }
   it { should validate_presence_of :question }
