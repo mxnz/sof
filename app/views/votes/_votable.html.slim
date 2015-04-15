@@ -1,8 +1,8 @@
 div class="votable" data-votable="#{votable.class.name}_#{votable.id}"
   - if user_signed_in? && !current_user.owns?(votable)
-    - if votable.voted_by(current_user)
+    - if current_user.voted_on?(votable)
       div class="rating" = votable.rating
-      = link_to 'remove vote', votable.vote_of(current_user), method: :delete, remote: true
+      = link_to 'remove vote', current_user.vote_of(votable), method: :delete, remote: true
     - else
       = link_to 'vote up', votes_path( vote: { votable_id: votable.id, votable_type: votable.class.name, up: true } ), method: :post, remote: true
       div class="rating" = votable.rating
