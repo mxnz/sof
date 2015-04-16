@@ -3,67 +3,55 @@ class AnswersController < ApplicationController
 
   def index
     question = Question.includes(answers: [:attachments]).find(params[:question_id])
-    respond_to do |format|
-      format.json { render json: hashes_for(question.answers) }
-    end
+    render json: hashes_for(question.answers)
   end
 
   def new
     question = Question.find(params[:question_id])
-    respond_to do |format|
-      format.json { render json: hash_for(Answer.new(question: question)) }
-    end
+    render json: hash_for(Answer.new(question: question))
   end
 
   def create
     @question = find_question(params[:question_id])
     @answer = @question.answers.create(answer_params.merge(user: current_user))
-    respond_to do |format|
-      if @answer.errors.present?
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-      else
-        format.json { render json: hashes_for(@question.answers) }
-      end
+    if @answer.errors.present?
+      render json: @answer.errors.full_messages, status: :unprocessable_entity 
+    else
+      render json: hashes_for(@question.answers) 
     end
   end
 
   def update
     @answer = Answer.includes(:question, :attachments).find(params[:id])
     @answer.update(answer_params.merge(user: current_user)) if current_user.owns?(@answer)
-    respond_to do |format|
-      if @answer.errors.present?
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-      else
-        format.json { render json: hash_for(@answer) }
-      end
+    if @answer.errors.present?
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
+    else
+      render json: hash_for(@answer)
     end
   end
 
   def update_best
     @answer = Answer.includes(:user, :question).find(params[:id])
-    respond_to do |format|
-      if current_user.owns?(@answer.question)
-        if @answer.update(best_param_only)
-          @question = find_question(@answer.question_id) if @answer.update(best_param_only)
-          format.json { render json: hashes_for(@question.answers) }
-        else
-          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-        end
+    if current_user.owns?(@answer.question)
+      if @answer.update(best_param_only)
+        @question = find_question(@answer.question_id) if @answer.update(best_param_only)
+        render json: hashes_for(@question.answers)
       else
-        format.json { render json: ["Forbidden action!"], status: :unprocessable_entity }
+        render json: @answer.errors.full_messages, status: :unprocessable_entity
       end
+    else
+      render json: ["Forbidden action!"], status: :unprocessable_entity
     end
   end
 
   def destroy
     @answer = Answer.find(params[:id])
     @answer.destroy! if current_user.owns?(@answer)
-    respond_to do |format|
-      if @answer.destroyed?
-        format.json { render json: { id: @answer.id  } }
-      else
-        format.json { render json:  @answer.errors.full_messages, status: :unproccessable_entity }
-      end
+    if @answer.destroyed?
+      render json: { id: @answer.id  }
+    else
+      render json:  @answer.errors.full_messages, status: :unproccessable_entity
     end
   end
 
