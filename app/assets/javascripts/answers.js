@@ -34,6 +34,7 @@ $(function() {
       this.hideAnswerForm(answer);
     }.bind(this));
 
+    this._initNewAnswer();
   }
 
   AnswerList.prototype.newAnswerWrapper = function() {
@@ -104,7 +105,28 @@ $(function() {
     }
     return wrapper.find(answerId);
   };
+  
+  AnswerList.prototype._createNewAnswer = function() {
+    var questionId = parseInt(this._newAnswerWrapper.data("question_id"));
+    var userSignedIn = this._newAnswerWrapper.data("user_signed_in");
 
+    var newAnswer = {
+      id: null,
+      user_id: null,
+      question_id: questionId,
+      body: null,
+      belongs_to_cur_user: userSignedIn,
+      voted_by_cur_user: false,
+      vote_of_cur_user: null,
+      attachments: []
+    };
+    return newAnswer;
+  };
+
+  AnswerList.prototype._initNewAnswer = function() {
+    var newAnswer = this._createNewAnswer();
+    this.showAnswer(newAnswer);
+  };
   
   //----------------------------------------------------------------
 
@@ -113,7 +135,6 @@ $(function() {
   }
 
   AnswerListener.prototype.init = function() {
-    this._initNewAnswer();
     this._initAnswers();
 
     this._addAjaxListener(this._answerList.newAnswerWrapper(), "form.new_answer", function(answers) {
@@ -130,15 +151,7 @@ $(function() {
       this._answerList.showAnswers(answers);
     }.bind(this));
   };
-
-   AnswerListener.prototype._initNewAnswer = function() {
-    $.getJSON(
-      this._answerList.newAnswerPath()
-    ).done(function(answer) {
-      this._answerList.showAnswer(answer);
-    }.bind(this));
-  };
- 
+   
   AnswerListener.prototype._initAnswers = function() {
     $.getJSON(
       this._answerList.answersPath()

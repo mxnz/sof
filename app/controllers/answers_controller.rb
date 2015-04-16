@@ -6,11 +6,6 @@ class AnswersController < ApplicationController
     render json: hashes_for(question.answers)
   end
 
-  def new
-    question = Question.find(params[:question_id])
-    render json: hash_for(Answer.new(question: question))
-  end
-
   def create
     @question = find_question(params[:question_id])
     @answer = @question.answers.create(answer_params.merge(user: current_user))
