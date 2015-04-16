@@ -161,9 +161,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect { subject }.to_not change(Question, :count)
         end
 
-        it "redirects to index view" do
+        it "receives a 'forbidden' status" do
           subject
-          expect(response).to redirect_to questions_path
+          expect(response).to have_http_status(:forbidden)
         end
       end
 
@@ -173,9 +173,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect { subject }.to_not change(Question, :count)
         end
 
-        it "renders destroy template" do
+        it "receives a 'forbidden' status" do
           subject
-          should render_template :destroy
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end

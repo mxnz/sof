@@ -26,12 +26,14 @@ class QuestionsController < ApplicationController
   
   def update
     @question = Question.includes(:user, :attachments).find(params[:id])
-    @question.update(question_params) if current_user.owns?(@question)
+    forbid_if_current_user_doesnt_own(@question); return if performed?
+    @question.update(question_params)
   end
 
   def destroy
     @question = Question.find(params[:id])
-    @question.destroy! if current_user.owns?(@question)
+    forbid_if_current_user_doesnt_own(@question); return if performed?
+    @question.destroy! 
     respond_to do |format|
       format.html { redirect_to questions_path }
       format.js

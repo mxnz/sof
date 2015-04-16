@@ -18,7 +18,8 @@ class AnswersController < ApplicationController
 
   def update
     @answer = Answer.includes(:question, :attachments).find(params[:id])
-    @answer.update(answer_params.merge(user: current_user)) if current_user.owns?(@answer)
+    forbid_if_current_user_doesnt_own(@answer); return if performed?
+    @answer.update(answer_params.merge(user: current_user))
     if @answer.errors.blank?
       render json: hash_for(@answer)
     else
@@ -28,21 +29,19 @@ class AnswersController < ApplicationController
 
   def update_best
     @answer = Answer.includes(:user, :question).find(params[:id])
-    if current_user.owns?(@answer.question)
-      if @answer.update(best_param_only)
-        @question = find_question(@answer.question_id) if @answer.update(best_param_only)
-        render json: hashes_for(@question.answers)
-      else
-        render json: @answer.errors.full_messages, status: :unprocessable_entity
-      end
+    forbid_if_current_user_doesnt_own(@answer.question); return if performed?
+    if @answer.update(best_param_only)
+      @question = find_question(@answer.question_id) if @answer.update(best_param_only)
+      render json: hashes_for(@question.answers)
     else
-      render json: ["Forbidden action!"], status: :unprocessable_entity
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
     @answer = Answer.find(params[:id])
-    @answer.destroy! if current_user.owns?(@answer)
+    forbid_if_current_user_doesnt_own(@answer); return if performed?
+    @answer.destroy!
     if @answer.destroyed?
       render json: { id: @answer.id  }
     else
@@ -64,7 +63,7 @@ class AnswersController < ApplicationController
     def find_question(question_id)
       Question.includes(answers: [:attachments]).find(question_id)
     end
-
+    
     def hash_for(answer)
       json_answer = answer.as_json(include: :attachments).merge(
         belongs_to_cur_user: user_signed_in? && (answer.new_record? || current_user.owns?(answer)),
