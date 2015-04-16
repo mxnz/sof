@@ -9,20 +9,20 @@ class AnswersController < ApplicationController
   def create
     @question = find_question(params[:question_id])
     @answer = @question.answers.create(answer_params.merge(user: current_user))
-    if @answer.errors.present?
-      render json: @answer.errors.full_messages, status: :unprocessable_entity 
-    else
+    if @answer.errors.blank?
       render json: hashes_for(@question.answers) 
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity 
     end
   end
 
   def update
     @answer = Answer.includes(:question, :attachments).find(params[:id])
     @answer.update(answer_params.merge(user: current_user)) if current_user.owns?(@answer)
-    if @answer.errors.present?
-      render json: @answer.errors.full_messages, status: :unprocessable_entity
-    else
+    if @answer.errors.blank?
       render json: hash_for(@answer)
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
