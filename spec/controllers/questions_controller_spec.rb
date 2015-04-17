@@ -169,6 +169,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       context 'by request with js format' do
         subject { delete :destroy, id: question, format: :js }
+
         it "doesn't remove one" do
           expect { subject }.to_not change(Question, :count)
         end
