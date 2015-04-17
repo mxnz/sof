@@ -14,22 +14,26 @@ $(function() {
 
     this._newAnswerWrapper.on("click", '#answer_new [data-action="new_answer"]', function(e) {
       e.preventDefault();
+      $(e.target).hide();
       this.showAnswerForm();
     }.bind(this));
 
     this._answersWrapper.on( "click", '.answers .answer [data-action="edit_answer"]', function(e) {
       e.preventDefault();
+      $(e.target).hide();
       var answer = $(e.target).closest('.answer').data('answer');
       this.showAnswerForm(answer);
     }.bind(this));
 
     this._newAnswerWrapper.on('click', '.answer [data-action="cancel_edit_answer"]', function(e) {
       e.preventDefault();
+      $(e.target).closest(".answer").find('[data-action="new_answer"]').show();
       this.hideAnswerForm();
     }.bind(this));
 
     this._answersWrapper.on("click", '.answer [data-action="cancel_edit_answer"]', function(e) {
       e.preventDefault();
+      $(e.target).closest(".answer").find('[data-action="edit_answer"]').show();
       var answer = $(e.target).closest('.answer').data('answer');
       this.hideAnswerForm(answer);
     }.bind(this));
