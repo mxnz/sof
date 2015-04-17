@@ -116,6 +116,7 @@ $(function() {
       question_id: questionId,
       body: null,
       belongs_to_cur_user: userSignedIn,
+      can_be_voted_by_cur_user: false,
       voted_by_cur_user: false,
       vote_of_cur_user: null,
       attachments: []
