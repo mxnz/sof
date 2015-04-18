@@ -126,7 +126,8 @@ RSpec.describe AnswersController, type: :controller do
       subject { delete :destroy, id: another_answer, format: :json }
 
       it 'should respond with json format' do
-        expect { subject }.to change { response.header['Content-Type'] }.to include('application/json')
+        subject
+        expect(response).to have_http_status(:forbidden)
       end
 
       it "doesn't remove one" do

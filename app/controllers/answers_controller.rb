@@ -1,5 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :index
+  before_action :load_answer, only: [:update, :update_best, :destroy]
+  before_action :current_user_must_own_answer!, only: [:update, :destroy]
+  before_action :current_user_must_own_question!, only: [:update_best]
 
   def index
     @question = find_question(params[:question_id])
@@ -15,8 +18,6 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer = Answer.includes(:question, :attachments).find(params[:id])
-    forbid_if_current_user_doesnt_own(@answer); return if performed?
     if @answer.update(answer_params.merge(user: current_user))
       json_render_single @answer
     else
@@ -25,8 +26,6 @@ class AnswersController < ApplicationController
   end
 
   def update_best
-    @answer = Answer.includes(:user, :question).find(params[:id])
-    forbid_if_current_user_doesnt_own(@answer.question); return if performed?
     if @answer.update(best_param_only)
       @question = find_question(@answer.question_id)
       json_render_many @question.answers
@@ -36,8 +35,6 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-    forbid_if_current_user_doesnt_own(@answer); return if performed?
     @answer.destroy!
     json_render_single @answer
   end
@@ -47,6 +44,25 @@ class AnswersController < ApplicationController
   
     def answer_params
       params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
+    end
+
+    def load_answer
+      case action_name
+        when 'update'
+          @answer = Answer.includes(:question, :attachments).find(params[:id])
+        when 'update_best'
+          @answer = Answer.includes(:user, :question).find(params[:id])
+        when 'destroy'
+          @answer = Answer.find(params[:id])
+      end
+    end
+
+    def current_user_must_own_answer!
+      forbid_if_current_user_doesnt_own(@answer)
+    end
+    
+    def current_user_must_own_question!
+      forbid_if_current_user_doesnt_own(@answer.question)
     end
     
     def best_param_only

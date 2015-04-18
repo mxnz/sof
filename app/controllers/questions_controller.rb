@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :load_question, only: [:show, :update, :destroy]
+  before_action :current_user_must_own_question!, only: [:update, :destroy]
 
   def index
     @questions = Question.all
@@ -10,7 +12,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.includes(:attachments, answers: [:attachments]).find(params[:id])
   end
 
   def create
@@ -25,14 +26,10 @@ class QuestionsController < ApplicationController
   end
   
   def update
-    @question = Question.includes(:user, :attachments).find(params[:id])
-    forbid_if_current_user_doesnt_own(@question); return if performed?
     @question.update(question_params)
   end
 
   def destroy
-    @question = Question.find(params[:id])
-    forbid_if_current_user_doesnt_own(@question); return if performed?
     @question.destroy! 
     respond_to do |format|
       format.html { redirect_to questions_path }
@@ -42,8 +39,22 @@ class QuestionsController < ApplicationController
 
 
   private
-
     def question_params
       params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
+    end
+
+    def load_question
+      case action_name
+        when 'show'
+          @question = Question.includes(:attachments, answers: [:attachments]).find(params[:id])
+        when 'update'
+          @question = Question.includes(:user, :attachments).find(params[:id])
+        when 'destroy'
+          @question = Question.find(params[:id])
+      end
+    end
+
+    def current_user_must_own_question!
+      forbid_if_current_user_doesnt_own(@question)
     end
 end
