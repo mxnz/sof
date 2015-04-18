@@ -5,7 +5,8 @@ class Vote < ActiveRecord::Base
   attr_readonly :up
 
   validates :user, :votable, presence: true
-  validates :up, inclusion: { in: [false, true] }
+  validates :votable_type, inclusion: ['Question', 'Answer']
+  validates :up, inclusion: [false, true]
   validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
   validate :user_cannot_vote_for_himself
 
