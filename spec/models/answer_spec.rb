@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'votable_helper'
 
 RSpec.describe Answer, type: :model do
   it_behaves_like 'a votable'
