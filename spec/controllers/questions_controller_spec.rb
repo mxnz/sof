@@ -45,33 +45,36 @@ RSpec.describe QuestionsController, type: :controller do
     login_user
 
     context 'with valid attributes' do
-      subject do
+      let(:create_question) do
         post :create, question: attributes_for(:question).
           merge(attachments_attributes: attributes_for_list(:attachment, 2))
       end
 
       it 'redirects to show view' do
-        expect(subject).to redirect_to assigns(:question)
+        expect(create_question).to redirect_to assigns(:question)
       end
 
       it 'saves new question' do
-        expect { subject }.to change(current_user.questions, :count).by(1)
+        expect { create_question }.to change(current_user.questions, :count).by(1)
       end
       
       it 'saves new attachments' do
-        subject
+        create_question
         expect(current_user.questions.last.attachments.count).to eq(2)
       end
       
     end
 
     context 'with invalid attributes' do
-      subject { post :create, question: attributes_for(:invalid_question) }
+      let(:create_invalid_question) { post :create, question: attributes_for(:invalid_question) }
 
-      it { should render_template :new }
+      it "should render 'new'" do
+        create_invalid_question
+        should render_template :new
+      end
 
       it "doesn't save invalid question" do
-        expect { subject }.to_not change(Question, :count)
+        expect { create_invalid_question }.to_not change(Question, :count)
       end
     end
   end
@@ -84,39 +87,49 @@ RSpec.describe QuestionsController, type: :controller do
     
     context 'own question' do
       context 'with valid attributes' do
-        subject do
+        let(:update_question) do
           patch :update, id: question, question: upd_question.attributes.
             merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :js
         end
 
-        it { should render_template :update }
+        it 'should render :update' do
+          update_question
+          expect(response).to render_template :update
+        end
 
         it 'updates a question' do
-          expect { subject }.to change { [question.reload.title, question.body] }.
+          expect { update_question }.to change { [question.reload.title, question.body] }.
             to([upd_question.title, upd_question.body])
         end
 
         it 'saves new attachments' do
-          expect { subject }.to change(question.attachments, :count).by(2)
+          expect { update_question }.to change(question.attachments, :count).by(2)
         end
       end
 
       context 'with invalid attributes' do
-        subject { patch :update, id: question, question: attributes_for(:invalid_question), format: :js }
+        let(:update_invalid_question) do
+          patch :update, id: question, question: attributes_for(:invalid_question), format: :js
+        end
         
-        it { should render_template :update }
+        it do
+          update_invalid_question
+          expect(response).to render_template :update
+        end
 
         it 'does not update a question' do
-          expect { subject }.to_not change { question.reload.attributes }
+          expect { update_invalid_question }.to_not change { question.reload.attributes }
         end
       end
     end
     
     context "an another user's question" do
-      subject { patch :update, id: another_question, question: upd_question.attributes, format: :js }
+      let(:update_anothers_question) do
+        patch :update, id: another_question, question: upd_question.attributes, format: :js
+      end
 
       it 'does not update that question' do
-        expect { subject }.to_not change { another_question.reload.attributes }
+        expect { update_anothers_question }.to_not change { another_question.reload.attributes }
       end
     end
   end
@@ -128,25 +141,27 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question, user: current_user) }
 
       context 'by request with html format' do
-        subject { delete :destroy, id: question  }
+        let(:html_delete_question) { delete :destroy, id: question  }
 
         it "removes one" do
-          expect { subject }.to change(current_user.questions, :count).by(-1)
+          expect { html_delete_question }.to change { current_user.questions.count }.by(-1)
         end
 
         it "redirects to index view" do
-          subject
-          expect(response).to redirect_to questions_path
+          expect(html_delete_question).to redirect_to questions_path
         end
       end
 
       context 'by request with js format' do
-        subject { delete :destroy, id: question, format: :js }
+        let(:js_delete_question) { delete :destroy, id: question, format: :js }
 
-        it { should render_template :destroy }
+        it 'should render :destroy' do
+          js_delete_question
+          expect(response).to render_template :destroy
+        end
 
         it "removes one" do
-          expect { subject }.to change(current_user.questions, :count).by(-1)
+          expect { js_delete_question }.to change { current_user.questions.count }.by(-1)
         end
       end
     end
@@ -155,27 +170,27 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:question) { create(:question) }
 
       context 'by request with html format' do
-        subject { delete :destroy, id: question }
+        let(:delete_anothers_question) { delete :destroy, id: question }
 
         it "doesn't remove one" do
-          expect { subject }.to_not change(Question, :count)
+          expect { delete_anothers_question }.to_not change(Question, :count)
         end
 
         it "receives a 'forbidden' status" do
-          subject
+          delete_anothers_question
           expect(response).to have_http_status(:forbidden)
         end
       end
 
       context 'by request with js format' do
-        subject { delete :destroy, id: question, format: :js }
+        let(:js_delete_anothers_question) { delete :destroy, id: question, format: :js }
 
         it "doesn't remove one" do
-          expect { subject }.to_not change(Question, :count)
+          expect { js_delete_anothers_question }.to_not change(Question, :count)
         end
 
         it "receives a 'forbidden' status" do
-          subject
+          js_delete_anothers_question
           expect(response).to have_http_status(:forbidden)
         end
       end

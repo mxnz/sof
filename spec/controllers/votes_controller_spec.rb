@@ -7,16 +7,19 @@ RSpec.describe VotesController, type: :controller do
 
   describe "POST #create" do
     login_user
-    subject { post :create, vote: vote.attributes, format: :js }
+    let(:create_vote) { post :create, vote: vote.attributes, format: :js }
 
-    it { should render_template :change }
+    it 'should render :change' do
+      create_vote
+      expect(response).to render_template :change
+    end
 
     it "saves a new vote" do
-      expect { subject }.to change(question.votes, :count).by(1)
+      expect { create_vote }.to change(question.votes, :count).by(1)
     end
 
     it "increments question's rating" do
-      expect { subject }.to change { question.reload.rating }.by(1)
+      expect { create_vote }.to change { question.reload.rating }.by(1)
     end
   end
 
@@ -24,16 +27,20 @@ RSpec.describe VotesController, type: :controller do
 
     context 'own vote' do
       before { login pr_vote.user }
-      subject { delete :destroy, id: pr_vote.id, format: :js }
+      let(:delete_own_vote) { delete :destroy, id: pr_vote.id, format: :js }
 
-      it { should render_template :change }
+      it 'should render :change' do
+        delete_own_vote
+        expect(response).to render_template :change
+      end
 
       it "removes vote" do
-        expect { subject }.to change { Vote.find_by(id: pr_vote.id).present? }.from(true).to(false)
+        delete_own_vote
+        expect(Vote.find_by(id: pr_vote.id)).to be_nil
       end
 
       it "decrements question's rating" do
-        expect { subject }.to change { question.reload.rating }.by(-1)
+        expect { delete_own_vote }.to change { question.reload.rating }.by(-1)
       end
     end
 

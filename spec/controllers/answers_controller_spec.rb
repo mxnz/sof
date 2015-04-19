@@ -7,34 +7,38 @@ RSpec.describe AnswersController, type: :controller do
     login_user
 
     context 'with valid data' do
-      subject do
+      let(:create_answer) do
         post :create, question_id: question, answer: attributes_for(:answer).
           merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :json
       end
 
       it 'should respond with json format' do
-        expect { subject }.to change { response.header['Content-Type'] }.to include('application/json')
+        create_answer
+        expect(response.header['Content-Type']).to include('application/json')
       end
 
       it "saves new answer to given question" do
-        expect { subject }.to change(question.answers, :count).by(1)
+        expect { create_answer }.to change { question.answers.count }.by 1
       end
 
       it "saves new attachments" do
-        subject
+        create_answer
         expect(question.answers.last.attachments.count).to eq 2
       end
     end
 
     context 'with invalid data' do
-      subject { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json }
+      let(:create_invalid_answer) do
+        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json
+      end
 
       it 'should respond with json format' do
-        expect { subject }.to change { response.header['Content-Type'] }.to include('application/json')
+        create_invalid_answer
+        expect(response.header['Content-Type']).to include('application/json')
       end
 
       it "doesn't save new answer" do
-        expect { subject }.to_not change(Answer, :count)
+        expect { create_invalid_answer }.to_not change(Answer, :count)
       end
     end
   end
@@ -47,39 +51,40 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer) { create(:answer, user: current_user) }
 
       context 'with valid data' do
-        subject do
+        let(:update_answer) do
           patch :update, id: answer, answer: upd_answer.attributes.
             merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :json
         end
         
         it 'should respond with json format' do
-          expect { subject }.to change { response.header['Content-Type'] }.to include('application/json')
+          update_answer
+          expect(response.header['Content-Type']).to include('application/json')
         end
 
         it "updates that answer" do
-          expect { subject }.to change { answer.reload.body }.from(answer.body).to(upd_answer.body)
+          expect { update_answer }.to change { answer.reload.body }.from(answer.body).to(upd_answer.body)
         end
 
         it "saves new attachments" do
-          expect { subject }.to change { answer.attachments.count }.by(2)
+          expect { update_answer }.to change { answer.attachments.count }.by(2)
         end
       end
 
       context 'with invalid data' do
-        subject { patch :update, id: answer, answer: attributes_for(:invalid_answer), format: :json }
+        let(:update_invalid_answer) { patch :update, id: answer, answer: attributes_for(:invalid_answer), format: :json }
 
         it "doesn't update answer" do
-          expect { subject }.to_not change { answer.reload.body }
+          expect { update_invalid_answer }.to_not change { answer.reload.body }
         end
       end
     end
 
     context "another user's answer" do
       let(:another_answer) { create(:answer) }
-      subject { patch :update, id: another_answer, answer: upd_answer.attributes, format: :json }
 
       it "doesn't update answer" do
-        expect { subject }.to_not change { another_answer.reload.body }
+        expect { patch :update, id: another_answer, answer: upd_answer.attributes, format: :json }.
+          to_not change { another_answer.reload.body }
       end
     end
     
@@ -110,28 +115,29 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'own answer' do
       let!(:answer) { create(:answer, user: current_user) }
-      subject { delete :destroy, id: answer, format: :json }
+      let(:delete_own_answer) { delete :destroy, id: answer, format: :json }
 
       it 'should respond with json format' do
-        expect { subject }.to change { response.header['Content-Type'] }.to include('application/json')
+        delete_own_answer
+        expect(response.header['Content-Type']).to include('application/json')
       end
 
       it 'removes one' do
-        expect { subject }.to change(Answer, :count).by(-1)
+        expect { delete_own_answer }.to change(Answer, :count).by(-1)
       end
     end
 
     context "an another user's answer" do
       let!(:another_answer) { create(:answer) }
-      subject { delete :destroy, id: another_answer, format: :json }
+      let(:delete_anothers_answer) { delete :destroy, id: another_answer, format: :json }
 
       it 'should respond with json format' do
-        subject
+        delete_anothers_answer
         expect(response).to have_http_status(:forbidden)
       end
 
       it "doesn't remove one" do
-        expect { subject }.to_not change(Answer, :count)
+        expect { delete_anothers_answer }.to_not change(Answer, :count)
       end
     end
   end
