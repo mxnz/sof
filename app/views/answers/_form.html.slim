@@ -1,15 +1,24 @@
-- target = answer.id ? answer : [answer.question, answer]
-= nested_form_for target, remote: true do |f|
+- answer = Answer.new( body: '<%= answer.body %>'.html_safe )
+- attachment = answer.attachments.build
+- attachment.id = "<%= attachment.id %>".html_safe
+<% var create_url = "#{question_answers_path(question)}" %>
+<% var update_url = "#{answer_path('id')}" %>
+<% var url = answer.id ? update_url.replace('id', answer.id) : create_url ; %>
+<% var method = answer.id ? 'patch' : 'post' %>
 
-  = render "shared/error_messages", target: answer
+= nested_form_for answer, url: "<%= url %>".html_safe, method: "<%= method %>".html_safe, remote: true do |f|
 
+  div class="error_messages_wrapper"
+  
   div class="field"
     = f.label :body
     = f.text_area :body
 
-  = render 'attachments/attachment_controls', form: f
+  = render 'answers/attachment_controls', form: f
 
   div class="actions"
     = f.submit 'Publish'
-    = link_to('Delete', answer, method: :delete, remote: true) if answer.persisted?
+    <% if (answer.id) { %>
+    = link_to 'Delete', "<%= url %>".html_safe, method: :delete, data: { action: 'delete_answer' }, remote: true 
+    <% } %>
     = link_to 'Cancel', '#', data: { action: 'cancel_edit_answer' }

@@ -1,3 +1,5 @@
 ul class="answers"
-  - answers.each do |answer|
-    li = render answer
+  <% _.forEach(answers, function(answer) { %>
+    li
+      <%= answer_template( { answer: answer }) %>
+  <% }); %>

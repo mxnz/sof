@@ -1,6 +1,0 @@
-<% if @answer.errors.present? %>
-  $("#answer_new .error_messages").replaceWith("<%= j_render 'shared/error_messages', target: @answer %>");
-<% else %>
-  $("#answer_new").replaceWith("<%= j_render Answer.new(question: @question) %>");
-  $(".answers").replaceWith("<%= j_render 'answers/answers', answers: @question.answers %>");
-<% end %>

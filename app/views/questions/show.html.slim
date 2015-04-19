@@ -1,6 +1,13 @@
-div class="nested_form_blueprint"
-  = render 'answers/form', answer: Answer.new(question: @question)
+= render "answers/attachment_blueprint"
 = render @question    
-= render Answer.new(question: @question)
+script type="text/template" id="answer_form_template"
+  = render 'answers/form', question: @question 
+script type="text/template" id="answer_template"
+  = render 'answers/answer'
+script type="text/template" id="answers_template"
+  = render 'answers/answers'
+script type="text/template" id="error_messages_template"
+  = render 'answers/error_messages'
+div class="new_answer_wrapper" data-question_id="#{@question.id}" data-user_signed_in="#{user_signed_in?}"
 h2 Answers
-= render 'answers/answers', answers: @question.answers
+div class="answers_wrapper" data-question_answers_path="#{question_answers_path(@question)}"
