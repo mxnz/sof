@@ -1,16 +1,15 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :index
+  before_action :load_question, only: [:index, :create]
   before_action :load_answer, only: [:update, :update_best, :destroy]
   before_action :current_user_must_own_answer!, only: [:update, :destroy]
   before_action :current_user_must_own_question!, only: [:update_best]
 
   def index
-    @question = find_question(params[:question_id])
     json_render_many @question.answers
   end
 
   def create
-    @question = find_question(params[:question_id])
     @answer = @question.answers.create(answer_params.merge(user: current_user))
     @answer.errors.blank? ?
       json_render_many(@question.answers) :
@@ -44,6 +43,10 @@ class AnswersController < ApplicationController
   
     def answer_params
       params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
+    end
+
+    def load_question
+      @question = find_question(params[:question_id])
     end
 
     def load_answer
