@@ -41,6 +41,10 @@ $(function() {
     this._initNewAnswer();
   }
 
+  AnswerList.prototype.questionId = function() {
+    return parseInt(this._newAnswerWrapper.data("question_id"));
+  };
+
   AnswerList.prototype.newAnswerWrapper = function() {
     return this._newAnswerWrapper;
   };
@@ -111,7 +115,7 @@ $(function() {
   };
   
   AnswerList.prototype._createNewAnswer = function() {
-    var questionId = parseInt(this._newAnswerWrapper.data("question_id"));
+    var questionId = this.questionId();
     var userSignedIn = this._newAnswerWrapper.data("user_signed_in");
 
     var newAnswer = {
@@ -141,20 +145,8 @@ $(function() {
 
   AnswerListener.prototype.init = function() {
     this._initAnswers();
-
-    this._addAjaxListener(this._answerList.newAnswerWrapper(), "form.new_answer", function(answers) {
-      this._answerList.showAnswers(answers);
-      this._answerList.showAnswer();
-    }.bind(this));
-    this._addAjaxListener(this._answerList.answersWrapper(), "form.new_answer", function(answer) {
-      this._answerList.showAnswer(answer);
-    }.bind(this));
-    this._addAjaxListener(this._answerList.answersWrapper(), 'a[data-action="delete_answer"]', function(answer) {
-      this._answerList.removeAnswer(answer);
-    }.bind(this));
-    this._addAjaxListener(this._answerList.answersWrapper(), ".answer_best_false a, .answer_best_true a", function(answers) {
-      this._answerList.showAnswers(answers);
-    }.bind(this));
+    this._addAjaxListenersForErrors();
+    this._subscribeToPrivatePub();
   };
    
   AnswerListener.prototype._initAnswers = function() {
@@ -165,8 +157,38 @@ $(function() {
     }.bind(this));
   };
 
+  AnswerListener.prototype._addAjaxListenersForErrors = function() {
+    this._addAjaxListener(this._answerList.newAnswerWrapper(), "form.new_answer", function(answers) {
+    }.bind(this));
+    this._addAjaxListener(this._answerList.answersWrapper(), "form.new_answer", function(answer) {
+    }.bind(this));
+    this._addAjaxListener(this._answerList.answersWrapper(), 'a[data-action="delete_answer"]', function(answer) {
+    }.bind(this));
+    this._addAjaxListener(this._answerList.answersWrapper(), ".answer_best_false a, .answer_best_true a", function(answers) {
+    }.bind(this));
+  };
+
+  AnswerListener.prototype._subscribeToPrivatePub = function() {
+    var questionId = this._answerList.questionId();
+    var channelId = "/questions/" + questionId;
+
+    PrivatePub.subscribe(channelId, function(data, channel) {
+      if (data.answer) {
+        var answer = $.parseJSON(data.answer);
+        if (answer.destroyed) {
+          this._answerList.removeAnswer(answer);
+        } else {
+          this._answerList.showAnswer(answer);
+        }
+      } else if (data.answers) {
+        this._answerList.showAnswers($.parseJSON(data.answers));
+        this._answerList.showAnswer();
+      }
+    }.bind(this));
+  };
+
   AnswerListener.prototype._onMaybeError = function(e, xhr, status, successHandler) {
-    if (e.target !== e.currentTarget) return;
+    if (e.target !== e.currentTarget || !xhr.responseText) return;
     var obj = $.parseJSON(xhr.responseText);
     if (status === 'parsererror') {
       successHandler && successHandler(obj);
@@ -190,7 +212,6 @@ $(function() {
       this._onMaybeError(e, xhr, status, handler);
     }.bind(this));
   };
-
 
   var answerList = new AnswerList(".new_answer_wrapper", ".answers_wrapper");
   var answerListener = new AnswerListener(answerList);

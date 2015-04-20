@@ -43,3 +43,5 @@ Rails.application.configure do
 end
 
 Slim::Engine.options[:pretty] = false
+
+# `rackup private_pub.ru -s thin -E development`
