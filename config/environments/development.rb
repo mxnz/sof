@@ -42,6 +42,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end
 
-Slim::Engine.options[:pretty] = false
+Slim::Engine.options[:pretty] = false 
 
 # `rackup private_pub.ru -s thin -E development`

@@ -14,4 +14,9 @@ module ApplicationHelper
       j render(*args)
     end
   end
+
+  # unescape html (need for js templates)
+  def jst(str)
+    CGI::unescape_html CGI::unescape(str)
+  end
 end
