@@ -20,6 +20,7 @@ class QuestionsController < ApplicationController
     if @question.save
       flash[:success] = 'Your question is published successfully.'
       redirect_to @question
+      PrivatePub.publish_to '/questions', render_to_string('create', formats: [:js], locals: { question: @question })
     else
       render :new
     end
