@@ -8,7 +8,14 @@ script type="text/template" id="answers_template"
   = render 'answers/answers'
 script type="text/template" id="error_messages_template"
   = render 'answers/error_messages'
-div class="new_answer_wrapper" data-question_id="#{@question.id}" data-user_signed_in="#{user_signed_in?}"
+div class="new_answer_wrapper"
 h2 Answers
 div class="answers_wrapper" data-question_answers_path="#{question_answers_path(@question)}"
+script[type="text/data" id="app_data"
+  data-question_id="#{ @question.id }"
+  data-question_user_id="#{ @question.user_id }"
+  data-cur_user_signed_in="#{ user_signed_in? }"
+  data-cur_user_id="#{ user_signed_in? ? current_user.id : nil.to_json }"
+  data-cur_user_votes="#{ user_signed_in? ? current_user.votes.to_json(only: [:id, :votable_id, :votable_type]) : nil }"
+  ]
 = subscribe_to "/questions/#{@question.id}"

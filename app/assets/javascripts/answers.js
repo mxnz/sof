@@ -1,16 +1,80 @@
 $(function() {
 
-  function AnswerList(newAnswerWrapper, answersWrapper) {
+  function CurrentUser(appData) {
+    var app = $(appData);
+    this._app = app;
+
+    this.id = app.data("cur_user_id");
+    this.signedIn = app.data("cur_user_signed_in");
+    this.votes = app.data("cur_user_votes");
+  }
+
+  CurrentUser.prototype.owns = function(obj) {
+    return obj.user_id === this.id;
+  };
+
+  CurrentUser.prototype.votedOnAnswer = function(answer) {
+    return this.voteOfAnswer(answer) !== null;
+  };
+
+  CurrentUser.prototype.voteOfAnswer = function(answer) {
+    for(var i = 0; i < this.votes.length; i++) {
+      var vote = this.votes[i];
+      if(vote.votable_id === answer.id && vote.votable_type === 'Answer') {
+        return vote;
+      }
+    }
+    return null;
+  };
+  
+  //--------------------------------------------------
+
+  function CurrentQuestion(appData) {
+    var app = $(appData);
+    this._app = app;
+
+    this.id = app.data("question_id");
+    this.user_id = app.data("question_user_id");
+  }
+
+  //--------------------------------------------------
+
+  function AnswerBuilder(curUser, curQuestion) {
+    this.curUser = curUser;
+    this.curQuestion = curQuestion;
+  }
+
+  AnswerBuilder.prototype.completeAnswer = function(answer) {
+    var curUser = this.curUser;
+    var signedIn = curUser.signedIn;
+
+    answer.belongs_to_cur_user            = signedIn && curUser.owns(answer);
+    answer.question_belongs_to_cur_user   = signedIn && curUser.owns(this.curQuestion);
+    answer.can_be_voted_by_cur_user       = signedIn && !curUser.owns(answer);
+    answer.voted_by_cur_user              = signedIn && curUser.votedOnAnswer(answer);
+    answer.vote_of_cur_user               = signedIn && curUser.voteOfAnswer(answer);
+  };
+
+  AnswerBuilder.prototype.completeAnswers = function(answers) {
+    _.forEach(answers, function(answer) {
+      this.completeAnswer(answer);
+    }.bind(this));
+  };
+
+  //--------------------------------------------------
+
+  function AnswerList(newAnswerWrapper, answersWrapper, appData, curUser) {
 
     this._answer_form_template = _.template( $("#answer_form_template").html() );
     this._answer_template = _.template( $("#answer_template").html() );
     this._answers_template = _.template( $("#answers_template").html() );
     this._error_messages_template = _.template( $("#error_messages_template").html() );
 
-
     this._newAnswerWrapper = $(newAnswerWrapper);
     this._answersWrapper = $(answersWrapper);
     this._newAnswerWrapper.html('<div id="answer_new" />');
+    this._app = appData;
+    this._curUser = curUser;
 
     this._newAnswerWrapper.on("click", '#answer_new [data-action="new_answer"]', function(e) {
       e.preventDefault();
@@ -42,7 +106,7 @@ $(function() {
   }
 
   AnswerList.prototype.questionId = function() {
-    return parseInt(this._newAnswerWrapper.data("question_id"));
+    return parseInt(this._app.data("question_id"));
   };
 
   AnswerList.prototype.newAnswerWrapper = function() {
@@ -116,7 +180,7 @@ $(function() {
   
   AnswerList.prototype._createNewAnswer = function() {
     var questionId = this.questionId();
-    var userSignedIn = this._newAnswerWrapper.data("user_signed_in");
+    var userSignedIn = this._app.data("cur_user_signed_in");
 
     var newAnswer = {
       id: null,
@@ -139,8 +203,9 @@ $(function() {
   
   //----------------------------------------------------------------
 
-  function AnswerListener(answerList) {
-    this._answerList = answerList; 
+  function AnswerListener(answerList, answerBuilder) {
+    this._answerList = answerList;
+    this._answerBuilder = answerBuilder;
   }
 
   AnswerListener.prototype.init = function() {
@@ -153,6 +218,9 @@ $(function() {
     $.getJSON(
       this._answerList.answersPath()
     ).done(function(answers) {
+      this._answerBuilder.completeAnswers(answers);
+      console.log(answers);
+      console.log(this._answerBuilder.curUser.votes);
       this._answerList.showAnswers(answers);
     }.bind(this));
   };
@@ -178,10 +246,13 @@ $(function() {
         if (answer.destroyed) {
           this._answerList.removeAnswer(answer);
         } else {
+          this._answerBuilder.completeAnswer(answer);
           this._answerList.showAnswer(answer);
         }
       } else if (data.answers) {
-        this._answerList.showAnswers($.parseJSON(data.answers));
+        var answers = $.parseJSON(data.answers);
+        this._answerBuilder.completeAnswers(answers);
+        this._answerList.showAnswers(answers);
         this._answerList.showAnswer();
       }
     }.bind(this));
@@ -213,8 +284,12 @@ $(function() {
     }.bind(this));
   };
 
-  var answerList = new AnswerList(".new_answer_wrapper", ".answers_wrapper");
-  var answerListener = new AnswerListener(answerList);
+  var appData = $("#app_data");
+  var curUser = new CurrentUser(appData);
+  var curQuestion = new CurrentQuestion(appData);
+  var answerBuilder = new AnswerBuilder(curUser, curQuestion);
+  var answerList = new AnswerList(".new_answer_wrapper", ".answers_wrapper", appData, curUser);
+  var answerListener = new AnswerListener(answerList, answerBuilder);
   answerListener.init();
 
 });
