@@ -219,8 +219,6 @@ $(function() {
       this._answerList.answersPath()
     ).done(function(answers) {
       this._answerBuilder.completeAnswers(answers);
-      console.log(answers);
-      console.log(this._answerBuilder.curUser.votes);
       this._answerList.showAnswers(answers);
     }.bind(this));
   };
