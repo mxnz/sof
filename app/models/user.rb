@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :questions, dependent: :destroy, inverse_of: :user
   has_many :answers, dependent: :destroy, inverse_of: :user
   has_many :votes, dependent: :destroy, inverse_of: :user
+  has_many :comments, dependent: :destroy, inverse_of: :user
 
   def owns?(obj)
     obj.user_id == self.id

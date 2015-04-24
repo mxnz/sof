@@ -64,4 +64,5 @@ Rails.application.routes.draw do
   end
 
   resources :votes, only: [:create, :destroy]
+  resources :comments, only: [:create, :destroy]
 end

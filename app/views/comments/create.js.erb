@@ -1,0 +1,10 @@
+<% if @comment.errors.blank? %>
+  $(".comments").append("<%=j render @comment %>");
+  $('.comments_wrapper [data-action="new_comment"]').show();
+  var new_comment_form = $('.comments_wrapper form.new_comment');
+  new_comment_form.hide();
+  new_comment_form.replaceWith($('.comments_wrapper').data('new_comment_form').clone());
+<% else %>
+  $('.comments_wrapper form.new_comment .error_messages_wrapper').
+    html("<%=j render 'shared/error_messages', target: @comment %>");
+<% end %>

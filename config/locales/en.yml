@@ -26,3 +26,5 @@ en:
         body: 'Text'
       answer:
         body: 'Text'
+      comment:
+        body: 'Text'
