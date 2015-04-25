@@ -49,3 +49,4 @@ div class="answer" id=='answer_<%= id %>'
     = link_to('Answer', '#', data: { action: 'new_answer' }) 
   <% } %>
   div class="answer_form_wrapper"
+  = render 'answers/comments_wrapper'

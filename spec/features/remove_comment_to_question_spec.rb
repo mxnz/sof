@@ -21,7 +21,7 @@ RSpec.feature 'Remove comment to question', %{
     expect(page).to_not have_content(comment.body);
   end
 
-  scenario "An authenticated user cannot remove others' comment to the question" do
+  scenario "An authenticated user cannot remove other's comment to the question" do
     within ".question .comments_wrapper #comment_#{another_comment.id}" do
       expect(page).to_not have_selector(:link_or_button, 'Remove Comment')
     end

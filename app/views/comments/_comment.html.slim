@@ -2,4 +2,4 @@ li
   div class="comment" id="comment_#{comment.id}"
     p = comment.body
     - if current_user_owns?(comment)
-      = link_to('Remove Comment', comment, method: :delete, remote: true)
+      = link_to 'Remove Comment', comment, method: :delete, remote: true

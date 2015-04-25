@@ -8,3 +8,7 @@ json.attachments answer.attachments do |attachment|
     json.url          attachment.file.url
   end
 end
+
+json.comments answer.comments do |comment|
+  json.(comment, :id, :user_id, :body, :commentable_id, :commentable_type)
+end

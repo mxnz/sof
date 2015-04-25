@@ -53,6 +53,11 @@ $(function() {
     answer.can_be_voted_by_cur_user       = signedIn && !curUser.owns(answer);
     answer.voted_by_cur_user              = signedIn && curUser.votedOnAnswer(answer);
     answer.vote_of_cur_user               = signedIn && curUser.voteOfAnswer(answer);
+
+    for(i = 0; i < answer.comments.length; i++) {
+      var comment = answer.comments[i];
+      comment.belongs_to_cur_user = signedIn && curUser.owns(comment);
+    }
   };
 
   AnswerBuilder.prototype.completeAnswers = function(answers) {

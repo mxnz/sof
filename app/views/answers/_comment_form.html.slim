@@ -1,0 +1,20 @@
+- comment = Comment.new()
+- comment.commentable_id = "<%= answer.id %>".html_safe
+- comment.commentable_type = "Answer"
+
+= form_for comment, remote: true do |f|
+
+  div class="error_messages_wrapper"
+
+  div class="field"
+    = f.hidden_field :commentable_id
+
+  div class="field"
+    = f.hidden_field :commentable_type
+
+  div class="field"
+    = f.label :body
+    = f.text_area :body
+
+  div class="action"
+    = f.submit 'Publish'

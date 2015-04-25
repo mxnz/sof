@@ -5,5 +5,5 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :body, presence: true
   validates :commentable, presence: true
-  validates :commentable_type, inclusion: ['Question']
+  validates :commentable_type, inclusion: ['Question', 'Answer']
 end
