@@ -1,10 +1,10 @@
 - answer = Answer.new( body: '<%= answer.body %>'.html_safe )
 - attachment = answer.attachments.build
 - attachment.id = "<%= attachment.id %>".html_safe
-<% var create_url = "#{question_answers_path(question)}" %>
-<% var update_url = "#{answer_path('id')}" %>
-<% var url = answer.id ? update_url.replace('id', answer.id) : create_url ; %>
-<% var method = answer.id ? 'patch' : 'post' %>
+<% var create_url = "#{question_answers_path(question)}"; %>
+<% var update_url = "#{answer_path('id')}"; %>
+<% var url = answer.id ? update_url.replace('id', answer.id) : create_url; %>
+<% var method = answer.id ? 'patch' : 'post'; %>
 
 = nested_form_for answer, url: "<%= url %>".html_safe, method: "<%= method %>".html_safe, remote: true do |f|
 
