@@ -1,3 +1,3 @@
-<% publish_to "/questions/#{question_id_of_comment(@comment)}" do %>
+<% publish_to "/questions/#{ @comment.question_id }" do %>
   $("#comment_<%= @comment.id %>").closest('li').remove();
 <% end %>
