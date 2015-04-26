@@ -1,16 +1,8 @@
-- comment = Comment.new()
-- comment.commentable_id = "<%= answer.id %>".html_safe
-- comment.commentable_type = "Answer"
+<% var url = "#{answer_comments_path('answer.id')}".replace('answer.id', answer.id); %>
 
-= form_for comment, remote: true do |f|
+= form_for Comment.new(), url: "<%= url %>".html_safe, remote: true do |f|
 
   div class="error_messages_wrapper"
-
-  div class="field"
-    = f.hidden_field :commentable_id
-
-  div class="field"
-    = f.hidden_field :commentable_type
 
   div class="field"
     = f.label :body

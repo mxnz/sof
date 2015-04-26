@@ -8,7 +8,7 @@ RSpec.describe CommentsController, type: :controller do
     login_user
 
     context 'with valid data' do
-      let(:create_comment) { post :create, comment: comment.attributes, format: :js }
+      let(:create_comment) { post :create, question_id: question.id, comment: comment.attributes, format: :js }
       
       it 'should render :create' do
         create_comment
@@ -21,7 +21,7 @@ RSpec.describe CommentsController, type: :controller do
     end
 
     context 'with invalid data' do
-      let(:create_invalid_comment) { post :create, comment: attributes_for(:invalid_comment), format: :js }
+      let(:create_invalid_comment) { post :create, question_id: question.id, comment: attributes_for(:invalid_comment), format: :js }
 
       it "doesn't save a new comment" do
         expect { create_invalid_comment }.to_not change(Comment, :count)
