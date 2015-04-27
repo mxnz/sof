@@ -3,39 +3,32 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: [:show, :update, :destroy]
   before_action :current_user_must_own_question!, only: [:update, :destroy]
 
+  after_action :publish_question, only: :create
+
+  respond_to :html, :js
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def new
-    @question = Question.new(user: current_user)
+    respond_with(@question = Question.new(user: current_user))
   end
 
   def show
+    respond_with @question
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      flash[:success] = 'Your question is published successfully.'
-      redirect_to @question
-      PrivatePub.publish_to '/questions', render_to_string('create', formats: [:js], locals: { question: @question })
-    else
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
   
   def update
-    @question.update(question_params)
+    respond_with(@question.update(question_params))
   end
 
   def destroy
-    @question.destroy! 
-    respond_to do |format|
-      format.html { redirect_to questions_path }
-      format.js
-    end
+    respond_with(@question.destroy!)
   end
 
 
@@ -53,6 +46,10 @@ class QuestionsController < ApplicationController
         when 'destroy'
           @question = Question.find(params[:id])
       end
+    end
+
+    def publish_question
+      PrivatePub.publish_to '/questions', render_to_string('create', formats: [:js], locals: { question: @question })
     end
 
     def current_user_must_own_question!

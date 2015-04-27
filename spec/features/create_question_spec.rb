@@ -16,7 +16,7 @@ RSpec.feature "Create a question", %{
     fill_in 'Text', with: question.body
     click_on 'Publish'
 
-    expect(page).to have_content 'Your question is published successfully.'
+    expect(page).to have_content 'Question was successfully created.'
     expect(page).to have_content question.title
     expect(page).to have_content question.body
   end
