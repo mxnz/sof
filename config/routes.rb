@@ -58,14 +58,12 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   concern :commentable do
-    resources :comments, only: [:create, :destroy], shallow: true
+    resources :comments, only: [:create, :destroy]
   end
 
-  resources :questions do
-    concerns [:commentable]
-    resources :answers, shallow: true, only: [:index, :create, :update, :destroy] do
+  resources :questions, concerns: [:commentable], shallow: true do
+    resources :answers, concerns: [:commentable], only: [:index, :create, :update, :destroy] do
       patch :update_best, on: :member
-      concerns [:commentable]
     end
   end
 
