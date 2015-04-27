@@ -1,0 +1,6 @@
+var questionTemplate = _.template($("#question_template").html());
+var question = {
+  id:     <%= question.id %>,
+  title:  "<%= question.title %>"
+};
+$(".questions").append(questionTemplate( { question: question }));

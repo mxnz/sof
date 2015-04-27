@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
   before_action :current_user_must_own_question!, only: [:update_best]
 
   def index
-    json_render_many @question.answers
+    render partial: 'answers', formats: [:json], locals: { answers: @question.answers }
   end
 
   def create
@@ -77,11 +77,15 @@ class AnswersController < ApplicationController
     end
 
     def json_render_single(answer)
-      render partial: 'answer', formats: [:json], locals: { answer: answer }
+      rendered_answer = render_to_string partial: 'answer', formats: [:json], locals: { answer: answer }
+      PrivatePub.publish_to "/questions/#{answer.question_id}", answer: rendered_answer
+      render nothing: true
     end
 
     def json_render_many(answers)
-      render partial: 'answers', formats: [:json], locals: { answers: answers }
+      answers = render_to_string partial: 'answers', formats: [:json], locals: { answers: answers }
+      PrivatePub.publish_to "/questions/#{@question.id}", answers: answers
+      render nothing: true
     end
     
     def json_render_errors_of(answer)

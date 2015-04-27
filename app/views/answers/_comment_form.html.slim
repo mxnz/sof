@@ -1,0 +1,12 @@
+<% var url = "#{answer_comments_path('answer.id')}".replace('answer.id', answer.id); %>
+
+= form_for Comment.new(), url: "<%= url %>".html_safe, remote: true do |f|
+
+  div class="error_messages_wrapper"
+
+  div class="field"
+    = f.label :body
+    = f.text_area :body
+
+  div class="action"
+    = f.submit 'Publish'

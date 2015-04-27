@@ -1,6 +1,12 @@
 h1 Questions
-ul
+ul class="questions"
   - @questions.each do |question|
     li id="question_#{question.id}"
       h2 = link_to question.title, question
       = link_to 'Delete', question, method: :delete, remote: true if current_user_owns?(question) 
+
+= subscribe_to "/questions"
+
+script type="text/template" id="question_template"
+  li id == "question_<%= question.id %>"
+    h2 == jst link_to "<%= question.title %>", question_path("<%= question.id %>")

@@ -1,0 +1,18 @@
+<% if @comment.errors.blank? %>
+  <% publish_to "/questions/#{ @comment.question_id }" do %>
+    <% if @comment.commentable_type == 'Question' %>
+      var comments = $(".question .comments");
+    <% elsif @comment.commentable_type == 'Answer' %>
+      var comments = $("#answer_<%= @comment.commentable_id %> .comments");
+    <% end %>
+    comments.append("<%=j render @comment %>");
+    var comments_wrapper = comments.closest('.comments_wrapper');
+    comments_wrapper.find('[data-action="new_comment"]').show();
+    var new_comment_form = comments_wrapper.find('form.new_comment');
+    new_comment_form.hide();
+    new_comment_form.replaceWith(comments_wrapper.data('new_comment_form'));
+  <% end %>
+<% else %>
+  $('.comments_wrapper form.new_comment .error_messages_wrapper').
+    html("<%=j render 'shared/error_messages', target: @comment %>");
+<% end %>
