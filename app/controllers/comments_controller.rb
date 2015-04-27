@@ -4,12 +4,14 @@ class CommentsController < ApplicationController
   before_action :load_comment, only: :destroy
   before_action :current_user_must_own_comment!, only: :destroy
 
+  respond_to :js
+
   def create
-    @comment = Comment.create(comment_params.merge(user: current_user, commentable: @commentable))
+    respond_with(@comment = Comment.create(comment_params.merge(user: current_user, commentable: @commentable)))
   end
 
   def destroy
-    @comment.destroy!
+    respond_with(@comment.destroy!)
   end
 
   private
