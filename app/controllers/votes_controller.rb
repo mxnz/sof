@@ -3,17 +3,16 @@ class VotesController < ApplicationController
   before_action :load_vote, only: :destroy
   before_action :current_user_must_own_vote!, only: :destroy
 
+  respond_to :js
+
   def create
-    @vote = Vote.new(vote_params.merge(user: current_user))
-    @vote.save
-    @votable = @vote.votable.reload
-    render :change
+    @vote = Vote.create(vote_params.merge(user: current_user))
+    respond_with(@votable = @vote.votable.reload, template: 'votes/change')
   end
 
   def destroy
     @vote.destroy!
-    @votable = @vote.votable
-    render :change
+    respond_with(@votable = @vote.votable, template: 'votes/change')
   end
   
   private
