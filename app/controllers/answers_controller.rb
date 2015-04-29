@@ -19,9 +19,6 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
     respond_with(@answer, errors_only: true)
-    #@answer.errors.blank? ?
-    #  render(nothing: true) :
-    #  json_render_errors_of(@answer)
   end
 
   def update
@@ -76,10 +73,6 @@ class AnswersController < ApplicationController
     def find_question(question_id)
       Question.includes(answers: [:attachments]).find(question_id)
     end
-
-    #def json_render_errors_of(answer)
-    #  render json:  answer.errors.full_messages, status: :unproccessable_entity
-    #end
 
     def publish_answer
       return if @answer.errors.present?
