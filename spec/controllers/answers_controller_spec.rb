@@ -12,9 +12,8 @@ RSpec.describe AnswersController, type: :controller do
           merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :json
       end
 
-      it 'should respond with json format' do
-        create_answer
-        expect(response.header['Content-Type']).to include('application/json')
+      it 'should render answers' do
+        expect(create_answer).to render_template('answers/_answers')
       end
 
       it "saves new answer to given question" do
@@ -56,9 +55,8 @@ RSpec.describe AnswersController, type: :controller do
             merge(attachments_attributes: attributes_for_list(:attachment, 2)), format: :json
         end
         
-        it 'should respond with json format' do
-          update_answer
-          expect(response.header['Content-Type']).to include('application/json')
+        it 'should render answer' do
+          expect(update_answer).to render_template('answers/_answer')
         end
 
         it "updates that answer" do
@@ -117,9 +115,8 @@ RSpec.describe AnswersController, type: :controller do
       let!(:answer) { create(:answer, user: current_user) }
       let(:delete_own_answer) { delete :destroy, id: answer, format: :json }
 
-      it 'should respond with json format' do
-        delete_own_answer
-        expect(response.header['Content-Type']).to include('application/json')
+      it 'should render destroyed answer' do
+        expect(delete_own_answer).to render_template('answers/_answer')
       end
 
       it 'removes one' do

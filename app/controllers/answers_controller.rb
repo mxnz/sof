@@ -5,37 +5,35 @@ class AnswersController < ApplicationController
   before_action :current_user_must_own_answer!, only: [:update, :destroy]
   before_action :current_user_must_own_question!, only: [:update_best]
 
+  after_action :publish_answer, only: [:update, :destroy]
+  after_action :publish_answers, only: [:create, :update_best]
+
+  responders ErrorsJsonResponder
+
+  respond_to :json
+
   def index
-    render partial: 'answers', formats: [:json], locals: { answers: @question.answers }
+    respond_with(@question.answers, partial: 'answers', locals: { answers: @question.answers })
   end
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
-    @answer.errors.blank? ?
-      json_render_many(@question.answers) :
-      json_render_errors_of(@answer)
+    respond_with(@answer, errors_only: true)
   end
 
   def update
-    if @answer.update(answer_params.merge(user: current_user))
-      json_render_single @answer
-    else
-      json_render_errors_of @answer
-    end
+    @answer.update(answer_params.merge(user: current_user))
+    respond_with(@answer, errors_only: true)
   end
 
   def update_best
-    if @answer.update(best_param_only)
-      @question = find_question(@answer.question_id)
-      json_render_many @question.answers
-    else
-      json_render_errors_of @answer 
-    end
+    @answer.update(best_param_only)
+    @question = find_question(@answer.question_id) if @answer.errors.blank?
+    respond_with(@answer, errors_only: true)
   end
 
   def destroy
-    @answer.destroy!
-    json_render_single @answer
+    respond_with(@answer.destroy!, errors_only: true)
   end
 
 
@@ -76,19 +74,15 @@ class AnswersController < ApplicationController
       Question.includes(answers: [:attachments]).find(question_id)
     end
 
-    def json_render_single(answer)
-      rendered_answer = render_to_string partial: 'answer', formats: [:json], locals: { answer: answer }
-      PrivatePub.publish_to "/questions/#{answer.question_id}", answer: rendered_answer
-      render nothing: true
+    def publish_answer
+      return if @answer.errors.present?
+      rendered_answer = render_to_string partial: 'answer', formats: [:json], locals: { answer: @answer }
+      PrivatePub.publish_to "/questions/#{@answer.question_id}", answer: rendered_answer
     end
 
-    def json_render_many(answers)
-      answers = render_to_string partial: 'answers', formats: [:json], locals: { answers: answers }
+    def publish_answers
+      return if @answer.errors.present?
+      answers = render_to_string partial: 'answers', formats: [:json], locals: { answers: @question.answers }
       PrivatePub.publish_to "/questions/#{@question.id}", answers: answers
-      render nothing: true
-    end
-    
-    def json_render_errors_of(answer)
-      render json:  answer.errors.full_messages, status: :unproccessable_entity
     end
 end

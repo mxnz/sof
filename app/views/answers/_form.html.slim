@@ -6,7 +6,7 @@
 <% var url = answer.id ? update_url.replace('id', answer.id) : create_url; %>
 <% var method = answer.id ? 'patch' : 'post'; %>
 
-= nested_form_for answer, url: "<%= url %>".html_safe, method: "<%= method %>".html_safe, remote: true do |f|
+= nested_form_for answer, url: "<%= url %>".html_safe, method: "<%= method %>".html_safe, remote: true, html: {data: {type: :json}} do |f|
 
   div class="error_messages_wrapper"
   
@@ -19,6 +19,7 @@
   div class="actions"
     = f.submit 'Publish'
     <% if (answer.id) { %>
-    = link_to 'Delete', "<%= url %>".html_safe, method: :delete, data: { action: 'delete_answer' }, remote: true 
+    <% var del_url = "#{answer_path('id', format: :json)}".replace('id', answer.id); %>
+    = link_to 'Delete', "<%= del_url %>".html_safe, method: :delete, data: { action: 'delete_answer' }, remote: true 
     <% } %>
     = link_to 'Cancel', '#', data: { action: 'cancel_edit_answer' }
