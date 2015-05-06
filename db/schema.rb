@@ -53,10 +53,12 @@ ActiveRecord::Schema.define(version: 20150503142033) do
 
   create_table "identities", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "uid",        null: false
-    t.string   "provider",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "uid",          null: false
+    t.string   "provider",     null: false
+    t.string   "confirm_code"
+    t.string   "email"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "identities", ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true, using: :btree

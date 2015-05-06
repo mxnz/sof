@@ -4,6 +4,8 @@ class CreateIdentities < ActiveRecord::Migration
       t.references :user, index: true
       t.string :uid, null: false
       t.string :provider, null: false
+      t.string :confirm_code
+      t.string :email
 
       t.timestamps null: false
     end

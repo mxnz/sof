@@ -10,8 +10,7 @@ RSpec.feature 'Sign in with Facebook', %{
   let(:reg_user) { create(:user) }
 
   scenario 'An unregistered user sign in with Facebook' do
-    OmniAuth.config.mock_auth[:facebook] = nil
-    OmniAuth.config.add_mock(:facebook, { uid: '12345', info: { name: 'Alice', email: unreg_user.email } });
+    sign_in_soc_network(:facebook, { uid: '12345', info: { name: 'Alice', email: unreg_user.email } })
 
     visit new_user_session_path
     click_on 'Sign in with Facebook'
@@ -23,8 +22,7 @@ RSpec.feature 'Sign in with Facebook', %{
   end
 
   scenario 'A registered user sign in with Facebook' do
-    OmniAuth.config.mock_auth[:facebook] = nil
-    OmniAuth.config.add_mock(:facebook, { uid: '12345', info: { name: 'Bob', email: reg_user.email } });
+    sign_in_soc_network(:facebook, { uid: '12345', info: { name: 'Bob', email: reg_user.email } })
 
     visit new_user_session_path
     click_on 'Sign in with Facebook'
