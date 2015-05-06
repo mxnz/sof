@@ -52,7 +52,8 @@ RSpec.feature 'Sign in with Twitter', %{
 
     expect(page).to have_content 'Please confirm your email.'
 
-    visit find_link('Confirm your email now', in: last_email.body)
+    open_email(reg_user.email)
+    current_email.click_on 'Confirm your email now'
 
     expect(page).to have_content 'Successfully authenticated from Twitter account'
     expect(page).to_not have_selector(:link_or_button, 'Log in')
