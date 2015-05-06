@@ -29,6 +29,18 @@ RSpec.feature 'Sign in with Twitter', %{
     expect(current_path).to eq root_path
   end
 
+  scenario "An unregistered user sign in with Twitter and doesn't fill email field" do
+    sign_in_soc_network(:twitter, uid: '54321', info: { name: 'Alice' })
+
+    visit new_user_session_path
+    click_on 'Sign in with Twitter'
+
+    click_on 'Sign up'
+
+    expect(page).to have_content "Email can't be blank"
+    expect(current_path).to eq user_registration_path
+  end
+
   scenario 'A registered user with identity sign in with Twitter' do
     sign_in_soc_network(:twitter, { uid: identity.uid, info: { name: 'Bob' } })
 
