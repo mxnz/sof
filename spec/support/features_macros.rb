@@ -5,4 +5,9 @@ module FeaturesMacros
     fill_in 'Password', with: user.password
     click_on 'Log in'
   end
+
+  def sign_in_soc_network(soc_network, options)
+    OmniAuth.config.mock_auth[soc_network] = nil
+    OmniAuth.config.add_mock(soc_network, options)
+  end
 end
