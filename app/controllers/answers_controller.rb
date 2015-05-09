@@ -2,11 +2,11 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :index
   before_action :load_question, only: [:index, :create]
   before_action :load_answer, only: [:update, :update_best, :destroy]
-  before_action :current_user_must_own_answer!, only: [:update, :destroy]
-  before_action :current_user_must_own_question!, only: [:update_best]
 
   after_action :publish_answer, only: [:update, :destroy]
   after_action :publish_answers, only: [:create, :update_best]
+
+  authorize_resource
 
   responders ErrorsJsonResponder
 
@@ -56,14 +56,6 @@ class AnswersController < ApplicationController
         when 'destroy'
           @answer = Answer.find(params[:id])
       end
-    end
-
-    def current_user_must_own_answer!
-      forbid_if_current_user_doesnt_own(@answer)
-    end
-    
-    def current_user_must_own_question!
-      forbid_if_current_user_doesnt_own(@answer.question)
     end
     
     def best_param_only

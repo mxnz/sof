@@ -11,6 +11,6 @@
  
   div class="actions"
     = f.submit 'Publish'
-    - if question.persisted? && current_user_owns?(@question)
+    - if question.persisted? && can?(:destroy, @question)
       = link_to('Delete', question, method: :delete) 
     = link_to 'Cancel', questions_path, data: { action: 'cancel_edit_question' }

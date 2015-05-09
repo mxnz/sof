@@ -1,5 +1,5 @@
 div class="votable" data-votable="#{votable.class.name}_#{votable.id}"
-  - if user_signed_in? && !current_user.owns?(votable)
+  - if can?(:create, Vote.new(votable: votable))
     - if current_user.voted_on?(votable)
       div class="rating" = votable.rating
       = link_to 'remove vote', current_user.vote_of(votable), method: :delete, remote: true

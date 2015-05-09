@@ -175,11 +175,6 @@ RSpec.describe QuestionsController, type: :controller do
         it "doesn't remove one" do
           expect { delete_anothers_question }.to_not change(Question, :count)
         end
-
-        it "receives a 'forbidden' status" do
-          delete_anothers_question
-          expect(response).to have_http_status(:forbidden)
-        end
       end
 
       context 'by request with js format' do
@@ -187,11 +182,6 @@ RSpec.describe QuestionsController, type: :controller do
 
         it "doesn't remove one" do
           expect { js_delete_anothers_question }.to_not change(Question, :count)
-        end
-
-        it "receives a 'forbidden' status" do
-          js_delete_anothers_question
-          expect(response).to have_http_status(:forbidden)
         end
       end
     end

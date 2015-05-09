@@ -2,7 +2,8 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_commentable, only: :create
   before_action :load_comment, only: :destroy
-  before_action :current_user_must_own_comment!, only: :destroy
+
+  authorize_resource
 
   respond_to :js
 
@@ -29,9 +30,5 @@ class CommentsController < ApplicationController
 
     def load_comment
       @comment = Comment.find(params[:id])
-    end
-
-    def current_user_must_own_comment!
-      forbid_if_current_user_doesnt_own(@comment)
     end
 end

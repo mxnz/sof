@@ -128,11 +128,6 @@ RSpec.describe AnswersController, type: :controller do
       let!(:another_answer) { create(:answer) }
       let(:delete_anothers_answer) { delete :destroy, id: another_answer, format: :json }
 
-      it 'should respond with json format' do
-        delete_anothers_answer
-        expect(response).to have_http_status(:forbidden)
-      end
-
       it "doesn't remove one" do
         expect { delete_anothers_answer }.to_not change(Answer, :count)
       end
