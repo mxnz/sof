@@ -1,9 +1,11 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_vote, only: :destroy
-  before_action :current_user_must_own_vote!, only: :destroy
+
+  authorize_resource
 
   respond_to :js
+
 
   def create
     @vote = Vote.create(vote_params.merge(user: current_user))
@@ -22,9 +24,5 @@ class VotesController < ApplicationController
 
     def load_vote
       @vote = Vote.find(params[:id])
-    end
-
-    def current_user_must_own_vote!
-      forbid_if_current_user_doesnt_own(@vote)
     end
 end

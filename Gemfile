@@ -47,6 +47,8 @@ gem 'omniauth-facebook'
 
 gem 'omniauth-twitter'
 
+gem 'cancancan'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -72,6 +74,10 @@ group :development, :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'capybara-webkit'
+end
+
+group :development do
+  gem 'foreman'
 end
 
 group :test do

@@ -4,6 +4,6 @@ div class="question"
   ul class="attachments" = render question.attachments
   div class="votable_wrapper" = render 'votes/votable', votable: question
   div class="question_controls"
-    = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if current_user_owns?(@question)
+    = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if can?(:edit, @question)
     div class="question_form_wrapper" 
   = render 'comments/comments_wrapper', commentable: question
