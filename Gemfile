@@ -76,6 +76,10 @@ group :development, :test do
   gem 'capybara-webkit'
 end
 
+group :development do
+  gem 'foreman'
+end
+
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara-email'
