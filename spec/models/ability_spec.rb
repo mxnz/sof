@@ -6,7 +6,7 @@ RSpec.describe Ability, type: :model do
   context 'for guest' do
     let(:user) { nil }
 
-    it_behaves_like 'a guest'
+    it_behaves_like 'a reader'
   end
 
   context 'for user' do
@@ -29,7 +29,7 @@ RSpec.describe Ability, type: :model do
     let(:other_vote) { create(:vote, votable: other_question) }
 
 
-    it_behaves_like 'a guest'
+    it_behaves_like 'a reader'
 
     it { should be_able_to :manage, question }
     it { should_not be_able_to :manage, other_question }
