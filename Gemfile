@@ -77,7 +77,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'foreman'
+  gem 'foreman', require: false
 end
 
 group :test do
