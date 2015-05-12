@@ -61,3 +61,7 @@ RSpec.configure do |config|
   config.include ControllerMacros, type: :controller
 
 end
+
+JsonSpec.configure do
+  exclude_keys nil 
+end

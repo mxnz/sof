@@ -24,7 +24,7 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       it 'should contain my profile' do
-        expect(response.body).to be_json_eql(me.to_json).including(:id)
+        expect(response.body).to be_json_eql(me.to_json)
       end
       
       %w{password encrypted_password}.each do |attr|
@@ -59,7 +59,7 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       it 'returns all profiles except mine' do
-        expect(response.body).to be_json_eql(other_users.to_json).including(:id)
+        expect(response.body).to be_json_eql(other_users.to_json)
       end
     end
   end
