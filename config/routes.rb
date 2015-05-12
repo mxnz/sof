@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :profiles do
         get :me
+        get :all
       end
     end
   end
