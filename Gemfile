@@ -49,6 +49,8 @@ gem 'omniauth-twitter'
 
 gem 'cancancan'
 
+gem 'doorkeeper'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -83,4 +85,5 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara-email'
+  gem 'json_spec'
 end
