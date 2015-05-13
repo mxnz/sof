@@ -37,7 +37,7 @@ RSpec.describe 'answers API', type: :request do
 
   describe "GET /answers/:id" do
     let!(:answer) { create(:answer) }
-    let!(:comments) { create_list(:comment, 3, commentable: answer) }
+    let!(:comments) { create_list(:comment, 3, commentable: answer).reverse }
     let!(:attachments) { create_list(:attachment, 2, attachable: answer).map { |a| a.file.url }.reverse }
 
     context 'unauthorized' do
@@ -55,8 +55,13 @@ RSpec.describe 'answers API', type: :request do
         end
 
         it 'contains answer attributes' do
-          expect(response.body).to be_json_eql(answer.to_json(except: :user_id,
-            include: [comments: { except: [:user_id, :commentable_id, :commentable_type] }])).at_path('answer').excluding(:attachments)
+          answer_json = answer.as_json().except('user_id').to_json
+          expect(response.body).to be_json_eql(answer_json).at_path('answer').excluding(:comments, :attachments)
+        end
+
+        it 'contains answer comments' do
+          comments_json = comments.map { |c| c.as_json.except('user_id', 'commentable_id', 'commentable_type') }.to_json
+          expect(response.body).to be_json_eql(comments_json).at_path('answer/comments')
         end
 
         it 'contains answer attachments' do
@@ -74,7 +79,7 @@ RSpec.describe 'answers API', type: :request do
 
   describe 'POST /questions/:question_id/answers' do
     let(:question) { create(:question) }
-    let!(:answer) { build(:answer) }
+    let!(:answer) { build(:answer, question: question) }
 
     context 'unauthorized' do
       it_behaves_like 'an unauthorized api request' do
@@ -96,8 +101,8 @@ RSpec.describe 'answers API', type: :request do
 
           it 'contains given answer attributes' do
             create_answer
-            expect(response.body).to be_json_eql(answer.to_json(except: :user_id, include: [:attachments, :comments])).
-              at_path('answer').excluding(:id, :question_id, :created_at, :updated_at)
+            expect(response.body).to be_json_eql(answer.to_json).at_path('answer').
+              excluding(:id, :attachments, :comments, :user_id, :created_at, :updated_at)
           end
 
           it 'creates new answer for authorized user' do

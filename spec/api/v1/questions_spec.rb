@@ -27,7 +27,7 @@ RSpec.describe 'questions API', type: :request do
 
   describe 'GET /questions/:question_id' do
     let!(:question) { create(:question) }
-    let!(:comments) { create_list(:comment, 3, commentable: question) }
+    let!(:comments) { create_list(:comment, 3, commentable: question).reverse }
     let!(:attachments) { create_list(:attachment, 2, attachable: question).map { |a| a.file.url }.reverse }
 
     context 'unauthorized' do
@@ -45,9 +45,13 @@ RSpec.describe 'questions API', type: :request do
         end
 
         it 'should contain requested question' do
-          expect(response.body).to be_json_eql(question.to_json(
-            except: :user_id, include: { comments: { except: [:user_id, :commentable_id, :commentable_type] } } )).
-            at_path('question').excluding(:attachments)
+          question_json = question.as_json.except('user_id').to_json
+          expect(response.body).to be_json_eql(question_json).at_path('question').excluding(:comments, :attachments)
+        end
+
+        it 'should contain requested question with comments' do
+          comments_json = comments.map { |c| c.as_json.except('user_id', 'commentable_id', 'commentable_type') }.to_json
+          expect(response.body).to be_json_eql(comments_json).at_path('question/comments')
         end
 
         it 'should contain requested question with attachments' do
@@ -85,8 +89,8 @@ RSpec.describe 'questions API', type: :request do
 
         it 'contains created question with given attributes' do
           create_question
-          expect(response.body).to be_json_eql(question.to_json(include: [:comments, :attachments])).
-            excluding(:id, :user_id, :created_at, :updated_at).at_path('question')
+          expect(response.body).to be_json_eql(question.to_json).
+            excluding(:id, :user_id, :comments, :attachments, :created_at, :updated_at).at_path('question')
         end
 
         it 'creates new question for authorized user' do
