@@ -37,35 +37,44 @@ RSpec.describe 'questions API', type: :request do
     end
 
     context 'authorized' do
-      before { get "/api/v1/questions/#{question.id}", access_token: access_token.token, format: :json }
+      context 'with valid question id' do
+        before { get "/api/v1/questions/#{question.id}", access_token: access_token.token, format: :json }
 
-      it 'returns success (200) status' do
-        expect(response).to have_http_status(:success)
+        it 'returns success (200) status' do
+          expect(response).to have_http_status(:success)
+        end
+
+        it 'should contain requested question' do
+          expect(response.body).to be_json_eql(question.to_json(
+            except: :user_id, include: { comments: { except: [:user_id, :commentable_id, :commentable_type] } } )).
+            at_path('question').excluding(:attachments)
+        end
+
+        it 'should contain requested question with attachments' do
+          expect(response.body).to be_json_eql(attachments.to_json).at_path('question/attachments')
+        end
       end
 
-      it 'should contain requested question' do
-        expect(response.body).to be_json_eql(question.to_json(
-          except: :user_id, include: { comments: { except: [:user_id, :commentable_id, :commentable_type] } } )).
-          at_path('question').excluding(:attachments)
-      end
-
-      it 'should contain requested question with attachments' do
-        expect(response.body).to be_json_eql(attachments.to_json).at_path('question/attachments')
+      context 'with invalid question id' do
+        it_behaves_like 'a not found api request' do
+          let(:api_request) { [:get, "/api/v1/questions/abc", {access_token: access_token.token}] }
+        end
       end
     end
   end
 
   describe 'POST /questions' do
+    let(:question) { build(:question) }
+
     context 'unauthorized' do
       it_behaves_like 'an unauthorized api request' do
-        let(:api_request) { [:post, '/api/v1/questions'] }
+        let(:api_request) { [:post, '/api/v1/questions', { question: question.attributes }] }
       end
     end
 
     context 'authorized' do
 
       context 'with valid attributes' do
-        let(:question) { build(:question) }
         let(:create_question) { post '/api/v1/questions', question: question.attributes, access_token: access_token.token, format: :json }
         let(:authorized_user) { User.find(access_token.resource_owner_id) }
 
