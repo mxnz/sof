@@ -46,7 +46,7 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       it 'returns all profiles except mine' do
-        expect(response.body).to be_json_eql(other_users.to_json)
+        expect(response.body).to be_json_eql(other_users.to_json).at_path('profiles')
       end
     end
   end
