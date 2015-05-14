@@ -6,13 +6,8 @@ RSpec.describe 'Profile API', type: :request do
 
   describe 'GET /profiles/me' do
     context 'unauthorized' do
-      it 'returns unauthorized (401) status if there is no access token' do
-        get '/api/v1/profiles/me', format: :json
-        expect(response).to have_http_status(:unauthorized)
-      end
-
-      it 'returns unauhtorized (401) status if there is invalid access toker' do
-        get '/api/v1/profiles/me', access_token: 'abcde', format: :json
+      it_behaves_like 'an unauthorized api request' do
+        let(:api_request) { [:get, '/api/v1/profiles/me'] }
       end
     end
 
@@ -24,7 +19,7 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       it 'should contain my profile' do
-        expect(response.body).to be_json_eql(me.to_json).including(:id)
+        expect(response.body).to be_json_eql(me.to_json)
       end
       
       %w{password encrypted_password}.each do |attr|
@@ -37,16 +32,8 @@ RSpec.describe 'Profile API', type: :request do
 
   describe 'GET /profiles' do
     context 'unauthorized' do
-      it 'returns unauthorized (401) status if there is no access token' do
-        get '/api/v1/profiles', format: :json
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-
-    context 'unauthorized' do
-      it 'returns unauthorized (401) status if there is invalid access token' do
-        get '/api/v1/profiles', access_token: 'abcde', format: :json
-        expect(response).to have_http_status(:unauthorized)
+      it_behaves_like 'an unauthorized api request' do
+        let(:api_request) { [:get, '/api/v1/profiles'] }
       end
     end
 
@@ -59,7 +46,7 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       it 'returns all profiles except mine' do
-        expect(response.body).to be_json_eql(other_users.to_json).including(:id)
+        expect(response.body).to be_json_eql(other_users.to_json).at_path('profiles')
       end
     end
   end

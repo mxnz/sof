@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.shared_examples "a votable" do
   let!(:votable_factory_name) { described_class.name.downcase.to_sym }
   let(:votable) { create(votable_factory_name) }
