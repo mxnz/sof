@@ -20,7 +20,7 @@ RSpec.describe 'questions API', type: :request do
       end
 
       it 'should contain all questions' do
-        expect(response.body).to be_json_eql(questions.to_json(except: :user_id)).at_path('questions')
+        expect(response.body).to be_json_eql(questions.to_json).at_path('questions')
       end
     end
   end
@@ -45,12 +45,11 @@ RSpec.describe 'questions API', type: :request do
         end
 
         it 'should contain requested question' do
-          question_json = question.as_json.except('user_id').to_json
-          expect(response.body).to be_json_eql(question_json).at_path('question').excluding(:comments, :attachments)
+          expect(response.body).to be_json_eql(question.to_json).at_path('question').excluding(:comments, :attachments)
         end
 
         it 'should contain requested question with comments' do
-          comments_json = comments.map { |c| c.as_json.except('user_id', 'commentable_id', 'commentable_type') }.to_json
+          comments_json = comments.map { |c| c.as_json.except('commentable_id', 'commentable_type') }.to_json
           expect(response.body).to be_json_eql(comments_json).at_path('question/comments')
         end
 

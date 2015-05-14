@@ -23,7 +23,7 @@ RSpec.describe 'answers API', type: :request do
         end
 
         it "contains answers array for given question" do
-          expect(response.body).to be_json_eql(question_answers.to_json(except: :user_id)).at_path('answers')
+          expect(response.body).to be_json_eql(question_answers.to_json).at_path('answers')
         end
       end
 
@@ -55,12 +55,11 @@ RSpec.describe 'answers API', type: :request do
         end
 
         it 'contains answer attributes' do
-          answer_json = answer.as_json().except('user_id').to_json
-          expect(response.body).to be_json_eql(answer_json).at_path('answer').excluding(:comments, :attachments)
+          expect(response.body).to be_json_eql(answer.to_json).at_path('answer').excluding(:comments, :attachments)
         end
 
         it 'contains answer comments' do
-          comments_json = comments.map { |c| c.as_json.except('user_id', 'commentable_id', 'commentable_type') }.to_json
+          comments_json = comments.map { |c| c.as_json.except('commentable_id', 'commentable_type') }.to_json
           expect(response.body).to be_json_eql(comments_json).at_path('answer/comments')
         end
 
