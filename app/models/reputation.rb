@@ -37,6 +37,16 @@ class Reputation
     User.update_counters(answer.user_id, rating: delta_rating)
   end
 
+  def self.update_after_vote(vote)
+    delta_rating = after_vote(vote)
+    User.update_counters(vote.votable.user_id, rating: delta_rating)
+  end
+
+  def self.update_after_best_answer(answer)
+    delta_rating = after_best_answer(answer)
+    User.update_counters(answer.user_id, rating: delta_rating)
+  end
+
   private
     def self.first?(answer)
       !answer.question.answers.where("created_at < ?", answer.created_at).any?

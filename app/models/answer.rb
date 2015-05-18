@@ -12,6 +12,7 @@ class Answer < ActiveRecord::Base
   before_save :ensure_the_best_is_unique, if: ->() { best? && best_changed? }
   after_create :update_author_rating
   after_destroy :update_author_rating
+  after_update :update_best_answer_author_rating, if: ->() { best_changed? }
 
   private
     def ensure_the_best_is_unique
@@ -20,5 +21,9 @@ class Answer < ActiveRecord::Base
 
     def update_author_rating
       Reputation.update_after_answer(self)
+    end
+
+    def update_best_answer_author_rating
+      Reputation.update_after_best_answer(self)
     end
 end

@@ -23,25 +23,38 @@ RSpec.describe Answer, type: :model do
   end
 
   describe '.create' do
-    it_behaves_like 'an action changing reputation' do
-      let(:author) { create(:user) }
-      let(:question) { create(:question) }
-      let(:action) { Answer.create(body: 'Test', question: question, user: author) }
-    end
+    let(:author) { create(:user) }
+    let(:question) { create(:question) }
+    let(:action) { Answer.create(body: 'Test', question: question, user: author) }
+
+    it_behaves_like "an action changing answer's author reputation"
+    it_behaves_like "an action not changing the best answer's author reputation"
   end
 
   describe '#update' do
-    it_behaves_like "an action not changing reputation" do
-      let!(:answer) { create(:answer) }
+    let!(:answer) { create(:answer) }
+
+    context 'without changing best attribute' do
       let(:action) { answer.update(body: 'updated_body') }
+
+      it_behaves_like "an action not changing answer's author reputation"
+      it_behaves_like "an action not changing the best answer's author reputation"
+    end
+    context 'changing best attribute' do
+      let(:author) { answer.user }
+      let(:action) { answer.update(best: true) }
+
+      it_behaves_like "an action not changing answer's author reputation"
+      it_behaves_like "an action changing the best answer's author reputation"
     end
   end
 
   describe '#destroy' do
-    it_behaves_like 'an action changing reputation' do
-      let!(:answer) { create(:answer) }
-      let(:author) { answer.user }
-      let(:action) { answer.destroy }
-    end
+    let!(:answer) { create(:answer) }
+    let(:author) { answer.user }
+    let(:action) { answer.destroy }
+
+    it_behaves_like "an action changing answer's author reputation"
+    it_behaves_like "an action not changing the best answer's author reputation"
   end
 end
