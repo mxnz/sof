@@ -5,7 +5,7 @@ RSpec.describe 'answers API', type: :request do
 
   describe 'GET /questions/:question_id/answers' do
     let(:question) { create(:question) }
-    let!(:question_answers) { create_list(:answer, 3, question: question).reverse }
+    let!(:question_answers) { create_list(:answer, 3, question: question) }
     let!(:other_answers) { create_list(:answer, 2) }
 
     context 'unauthorized' do

@@ -10,8 +10,11 @@ class Vote < ActiveRecord::Base
   validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
   validate :user_cannot_vote_for_himself
 
-  before_create :change_rating
-  before_destroy :rollback_rating
+  before_create :change_votable_rating
+  before_destroy :rollback_votable_rating
+
+  after_create :update_votable_author_reputation
+  after_destroy :update_votable_author_reputation
 
   private
     def user_cannot_vote_for_himself
@@ -20,7 +23,7 @@ class Vote < ActiveRecord::Base
       end
     end
 
-    def change_rating
+    def change_votable_rating
       klass = Object.const_get votable_type
       if up?
         klass.increment_counter(:rating, votable_id)
@@ -29,7 +32,7 @@ class Vote < ActiveRecord::Base
       end
     end
 
-    def rollback_rating
+    def rollback_votable_rating
       klass = Object.const_get votable_type
       if up?
         klass.decrement_counter(:rating, votable_id)
@@ -37,5 +40,8 @@ class Vote < ActiveRecord::Base
         klass.increment_counter(:rating, votable_id)
       end
     end
-    
+
+    def update_votable_author_reputation
+      Reputation.update_after_vote(self)
+    end
 end

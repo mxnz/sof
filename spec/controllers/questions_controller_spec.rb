@@ -62,6 +62,11 @@ RSpec.describe QuestionsController, type: :controller do
         create_question
         expect(current_user.questions.last.attachments.count).to eq(2)
       end
+
+      it 'broadcasts created question' do
+        expect(PrivatePub).to receive(:publish_to).with('/questions', anything)
+        create_question
+      end
       
     end
 
@@ -75,6 +80,11 @@ RSpec.describe QuestionsController, type: :controller do
 
       it "doesn't save invalid question" do
         expect { create_invalid_question }.to_not change(Question, :count)
+      end
+
+      it 'broadcasts nothing' do
+        expect(PrivatePub).to_not receive(:publish_to)
+        create_invalid_question
       end
     end
   end

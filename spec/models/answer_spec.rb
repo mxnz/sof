@@ -21,4 +21,40 @@ RSpec.describe Answer, type: :model do
     expect(answer.best).to eq true
     expect(another_answer.reload.best).to eq false
   end
+
+  describe '.create' do
+    let(:author) { create(:user) }
+    let(:question) { create(:question) }
+    let(:action) { Answer.create(body: 'Test', question: question, user: author) }
+
+    it_behaves_like "an action changing answer's author reputation"
+    it_behaves_like "an action not changing the best answer's author reputation"
+  end
+
+  describe '#update' do
+    let!(:answer) { create(:answer) }
+
+    context 'without changing best attribute' do
+      let(:action) { answer.update(body: 'updated_body') }
+
+      it_behaves_like "an action not changing answer's author reputation"
+      it_behaves_like "an action not changing the best answer's author reputation"
+    end
+    context 'changing best attribute' do
+      let(:author) { answer.user }
+      let(:action) { answer.update(best: true) }
+
+      it_behaves_like "an action not changing answer's author reputation"
+      it_behaves_like "an action changing the best answer's author reputation"
+    end
+  end
+
+  describe '#destroy' do
+    let!(:answer) { create(:answer) }
+    let(:author) { answer.user }
+    let(:action) { answer.destroy }
+
+    it_behaves_like "an action changing answer's author reputation"
+    it_behaves_like "an action not changing the best answer's author reputation"
+  end
 end

@@ -51,6 +51,7 @@ class QuestionsController < ApplicationController
     end
 
     def publish_question
+      return if @question.errors.present?
       PrivatePub.publish_to '/questions', render_to_string('create', formats: [:js], locals: { question: @question })
     end
 end
