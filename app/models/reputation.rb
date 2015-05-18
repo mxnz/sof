@@ -11,8 +11,8 @@ class Reputation
   def self.after_answer(answer)
     rating = 0
     rating += ANSWER_WEIGHT
-    rating += FIRST_ANSWER_WEIGHT if first?(answer)
-    rating += ANSWER_TO_OWN_QUESTION_WEIGHT if to_own_question?(answer)
+    rating += FIRST_ANSWER_WEIGHT if answer.first?
+    rating += ANSWER_TO_OWN_QUESTION_WEIGHT if answer.to_own_question?
     rating += BEST_ANSWER_WEIGHT if answer.best?
 
     answer.destroyed? ? -rating : rating
@@ -46,14 +46,4 @@ class Reputation
     delta_rating = after_best_answer(answer)
     User.update_counters(answer.user_id, rating: delta_rating)
   end
-
-  private
-    def self.first?(answer)
-      !answer.question.answers.where("created_at < ?", answer.created_at).any?
-    end
-
-    def self.to_own_question?(answer)
-      answer.user_id == answer.question.user_id
-    end
-
 end

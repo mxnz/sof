@@ -14,6 +14,14 @@ class Answer < ActiveRecord::Base
   after_destroy :update_author_rating
   after_update :update_best_answer_author_rating, if: ->() { best_changed? }
 
+  def first?
+    !question.answers.where("created_at < ?", created_at).any?
+  end
+
+  def to_own_question?
+    user_id == question.user_id
+  end
+
   private
     def ensure_the_best_is_unique
       Answer.where(question_id: question_id, best: true).update_all(best: false)
