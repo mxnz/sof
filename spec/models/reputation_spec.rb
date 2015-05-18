@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Reputation, type: :model, focus: true do
+RSpec.describe Reputation, type: :model do
   let(:question) { create(:question) }
 
   describe '.after_answer' do

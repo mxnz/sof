@@ -31,6 +31,12 @@ class Reputation
     vote.destroyed? ? -rating : rating
   end
 
+
+  def self.update_after_answer(answer)
+    delta_rating = after_answer(answer)
+    User.update_counters(answer.user_id, rating: delta_rating)
+  end
+
   private
     def self.first?(answer)
       !answer.question.answers.where("created_at < ?", answer.created_at).any?
