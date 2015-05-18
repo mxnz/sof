@@ -23,43 +23,25 @@ RSpec.describe Answer, type: :model do
   end
 
   describe '.create' do
-    let(:author) { create(:user) }
-    let(:question) { create(:question) }
-    let(:create_answer) { Answer.create(body: 'Test', question: question, user: author) }
-
-    it "invokes Reputaion.update_after_answer method" do
-      expect(Reputation).to receive(:update_after_answer)
-      create_answer
-    end
-
-    it "changes answer's author rating by Reputation.after_answer(...) value" do
-      allow(Reputation).to receive(:after_answer).and_return(10)
-      expect { create_answer }.to change { author.reload.rating }.by(10)
+    it_behaves_like 'an action changing reputation' do
+      let(:author) { create(:user) }
+      let(:question) { create(:question) }
+      let(:action) { Answer.create(body: 'Test', question: question, user: author) }
     end
   end
 
   describe '#update' do
-    let!(:answer) { create(:answer) }
-    
-    it "doesn't invoke Reputation.update_after_answer method" do
-      expect(Reputation).to_not receive(:update_after_answer)
-      answer.update(body: 'updated body')
+    it_behaves_like "an action not changing reputation" do
+      let!(:answer) { create(:answer) }
+      let(:action) { answer.update(body: 'updated_body') }
     end
   end
 
   describe '#destroy' do
-    let!(:answer) { create(:answer) }
-    let(:destroy_answer) { answer.destroy }
-
-    it "invokes Reputaion.update_after_answer method" do
-      expect(Reputation).to receive(:update_after_answer)
-      destroy_answer
+    it_behaves_like 'an action changing reputation' do
+      let!(:answer) { create(:answer) }
+      let(:author) { answer.user }
+      let(:action) { answer.destroy }
     end
-
-    it "changes answer's author rating by Reputation.after_answer(...) value" do
-      allow(Reputation).to receive(:after_answer).and_return(-10)
-      expect { destroy_answer }.to change { answer.user.reload.rating }.by(-10)
-    end
-
   end
 end
