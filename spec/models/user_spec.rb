@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should have_many(:identities).dependent(:destroy) }
+  it { should have_many(:email_subs).dependent(:destroy) }
 
   describe '.from_omniauth' do
     context "when user is unregistered" do
