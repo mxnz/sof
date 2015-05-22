@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   has_many :identities, dependent: :destroy, inverse_of: :user
   has_many :email_subs, dependent: :destroy, inverse_of: :user
 
+  after_create :subscribe_to_all_questions_digest
+
   attr_accessor :without_password
 
   def password_required?
@@ -52,4 +54,9 @@ class User < ActiveRecord::Base
     user.identities << identity
     user
   end
+
+  private 
+    def subscribe_to_all_questions_digest
+      self.email_subs.create(question: nil)
+    end
 end

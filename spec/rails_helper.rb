@@ -60,6 +60,7 @@ RSpec.configure do |config|
 
   config.include ControllerMacros, type: :controller
 
+  config.include Capybara::Email::DSL, :type => :job
 end
 
 JsonSpec.configure do

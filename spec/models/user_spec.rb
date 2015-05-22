@@ -11,6 +11,14 @@ RSpec.describe User, type: :model do
   it { should have_many(:identities).dependent(:destroy) }
   it { should have_many(:email_subs).dependent(:destroy) }
 
+  describe '.create' do
+    it 'subscribes given user to all questions digest' do
+      u = create(:user)
+      expect(u.email_subs.count).to eq 1
+      expect(u.email_subs.last.question).to be_nil
+    end
+  end
+
   describe '.from_omniauth' do
     context "when user is unregistered" do
       let(:user) { build(:user) }
