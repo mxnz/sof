@@ -16,10 +16,10 @@ class SubsMailer < ApplicationMailer
     date_range = yesterday...today
     questions = Question.where(created_at: date_range)
     return nil if questions.blank?
-    self.questions_digest_template(questions).message.body.raw_source
+    self.questions_digest_example(questions).message.body.raw_source
   end
 
-  def questions_digest_template(questions)
+  def questions_digest_example(questions)
     @questions = questions
     mail to: 'nobody@nowhere.com',
          subject: 'Template'
