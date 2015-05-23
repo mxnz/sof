@@ -35,6 +35,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def subscribed_to?(question)
+    return false unless question.is_a? Question
+    email_subs.any? { |es| es.question_id == question.id }
+  end
+
   def self.from_omniauth(auth)
     identity = Identity.includes(:user).find_or_create_by(uid: auth.uid, provider: auth.provider)
     return identity.user if identity.user.present?

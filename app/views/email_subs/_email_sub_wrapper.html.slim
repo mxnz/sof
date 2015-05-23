@@ -1,0 +1,7 @@
+- if user_signed_in?
+  div class="email_sub_wrapper"
+    div class="error_messages_wrapper"
+    - if can?(:create, EmailSub.new(question: question))
+      = link_to('Subscribe to the question', email_subs_path( email_sub: { question_id: question.id } ), method: :post, remote: true, format: :js)
+    - else
+      | You subscribed to the question

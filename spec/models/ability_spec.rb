@@ -28,6 +28,9 @@ RSpec.describe Ability, type: :model do
     let(:own_vote) { create(:vote, votable: other_question, user: user) }
     let(:other_vote) { create(:vote, votable: other_question) }
 
+    let(:email_sub_to_unsubscribed_question) { build(:email_sub, user: user, question: create(:question)) }
+    let(:email_sub_to_subscribed_question) { build(:email_sub, user: user, question: create(:email_sub, user: user).question) }
+
 
     it_behaves_like 'a reader'
 
@@ -48,5 +51,8 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :destroy, own_vote }
     it { should_not be_able_to :destroy, other_vote }
+
+    it { should be_able_to :create, email_sub_to_unsubscribed_question }
+    it { should_not be_able_to :create, email_sub_to_subscribed_question }
   end
 end
