@@ -10,7 +10,7 @@ class Answer < ActiveRecord::Base
   validates :user, :question, :body, presence: true
 
   before_save :ensure_the_best_is_unique, if: ->() { best? && best_changed? }
-  after_create :update_author_rating
+  after_create :update_author_rating, :notify_question_subscribers
   after_destroy :update_author_rating
   after_update :update_best_answer_author_rating, if: ->() { best_changed? }
 
@@ -33,5 +33,9 @@ class Answer < ActiveRecord::Base
 
     def update_best_answer_author_rating
       Reputation.update_after_best_answer(self)
+    end
+
+    def notify_question_subscribers
+      AnswerNotificationsJob.perform_later(id)
     end
 end

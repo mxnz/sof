@@ -8,4 +8,11 @@ class Question < ActiveRecord::Base
   has_many :email_subs, dependent: :destroy
 
   validates :title, :body, :user, presence: true
+
+  after_create :subscribe_author_to_question
+
+  private
+    def subscribe_author_to_question
+      EmailSub.create(user: user, question: self)
+    end
 end

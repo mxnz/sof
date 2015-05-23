@@ -29,6 +29,11 @@ RSpec.describe Answer, type: :model do
 
     it_behaves_like "an action changing answer's author reputation"
     it_behaves_like "an action not changing the best answer's author reputation"
+
+    it "sends email notification to question' subscribers" do
+      expect(AnswerNotificationsJob).to receive(:perform_later)
+      action
+    end
   end
 
   describe '#update' do
