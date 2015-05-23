@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should have_many(:identities).dependent(:destroy) }
-  it { should have_many(:email_subs).dependent(:destroy) }
+  it { should have_many(:email_subs).dependent(:delete_all) }
 
   describe '.create' do
     it 'subscribes given user to all questions digest' do

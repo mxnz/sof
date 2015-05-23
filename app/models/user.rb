@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :votes, dependent: :destroy, inverse_of: :user
   has_many :comments, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
-  has_many :email_subs, dependent: :destroy, inverse_of: :user
+  has_many :email_subs, dependent: :delete_all, inverse_of: :user
 
   after_create :subscribe_to_all_questions_digest
 
