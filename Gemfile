@@ -59,6 +59,10 @@ gem 'oj_mimic_json'
 
 gem 'whenever', require: false
 
+gem 'sidekiq'
+
+gem 'sinatra', require: false
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

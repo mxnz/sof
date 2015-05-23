@@ -4,7 +4,7 @@ RSpec.describe QuestionsDigestJob, type: :job do
   
   describe '.perform' do
     let(:questions) { create_list(:question, 3) }
-    let(:send_digest) { QuestionsDigestJob.perform_now }
+    let(:send_digest) { QuestionsDigestJob.perform_later }
 
     context 'when there are questions created yesterday' do
       before do

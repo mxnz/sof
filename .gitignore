@@ -17,3 +17,4 @@ config/private_pub.yml
 .DS_Store
 .*.swp
 public/uploads
+dump.rdb
