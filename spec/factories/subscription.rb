@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :email_sub do
+  factory :subscription do
     user
     question
   end

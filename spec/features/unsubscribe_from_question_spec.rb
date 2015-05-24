@@ -6,11 +6,11 @@ RSpec.feature 'Unsubscribe from question', %{
   I want to be able to unsubscribe from subscribed question
 }, type: :feature, js: true do
 
-  given(:email_sub) { create(:email_sub) }
+  given(:subscription) { create(:subscription) }
 
   scenario '' do
-    sign_in email_sub.user
-    visit question_path(email_sub.question)
+    sign_in subscription.user
+    visit question_path(subscription.question)
     click_on 'Unsubscribe from the question'
 
     expect(page).to_not have_selector(:link_or_button, 'Unsubscribe from the question')
@@ -19,7 +19,7 @@ RSpec.feature 'Unsubscribe from question', %{
   end
 
   scenario 'An unauthenticated user cannot unsubscribe from question' do
-    visit question_path(email_sub.question)
+    visit question_path(subscription.question)
     expect(page).to_not have_selector(:link_or_button, 'Unsubscribe from the question')
   end
 

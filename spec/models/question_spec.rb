@@ -6,7 +6,7 @@ RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:attachments).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
-  it { should have_many(:email_subs).dependent(:delete_all) }
+  it { should have_many(:subscriptions).dependent(:delete_all) }
   it { should belong_to(:user) }
 
   it { should validate_presence_of :user }
@@ -18,12 +18,12 @@ RSpec.describe Question, type: :model do
     let(:create_question) { create(:question, user: author) }
 
     it 'creates new email sub for author' do
-      expect { create_question }.to change(author.email_subs, :count).by 1
+      expect { create_question }.to change(author.subscriptions, :count).by 1
     end
 
     it 'creates email sub for question' do
       question = create_question
-      expect(question.email_subs.count).to eq 1
+      expect(question.subscriptions.count).to eq 1
     end
   end
 end

@@ -30,9 +30,9 @@ RSpec.describe QuestionsDigestJob, type: :job do
         end
       end
 
-      it 'updates sent_at attribute of email_subs to questions digest' do
-        digest_subs = EmailSub.where(question_id: nil).ids.sort
-        sent_subs = EmailSub.where('sent_at > :today', today: Time.now.utc.to_date).ids.sort
+      it 'updates sent_at attribute of subscriptions to questions digest' do
+        digest_subs = Subscription.where(question_id: nil).ids.sort
+        sent_subs = Subscription.where('sent_at > :today', today: Time.now.utc.to_date).ids.sort
         expect(digest_subs).to eq sent_subs
       end
 

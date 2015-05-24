@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe EmailSub, type: :model do
+RSpec.describe Subscription, type: :model do
   it { should belong_to :user }
   it { should belong_to :question }
 

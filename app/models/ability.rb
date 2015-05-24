@@ -24,9 +24,9 @@ class Ability
       !@user.owns?(vote.votable)
     end
     can :destroy, Vote, user_id: @user.id
-    can :create, EmailSub do |email_sub|
-      !@user.subscribed_to?(email_sub.question)
+    can :create, Subscription do |subscription|
+      !@user.subscribed_to?(subscription.question)
     end
-    can :destroy, EmailSub, user_id: @user.id
+    can :destroy, Subscription, user_id: @user.id
   end
 end

@@ -1,13 +1,13 @@
 class SubsMailer < ApplicationMailer
 
-  def questions_digest_email(email_sub_id, body)
-    email_sub = EmailSub.includes(:user).find(email_sub_id)
-    email = email_sub.user.email
+  def questions_digest_email(subscription_id, body)
+    subscription = Subscription.includes(:user).find(subscription_id)
+    email = subscription.user.email
     mail to: email,
          subject: 'Questions digest',
          body: body,
          content_type: 'text/html'
-    email_sub.update(sent_at: Time.now.utc)
+    subscription.update(sent_at: Time.now.utc)
   end
 
 
@@ -26,14 +26,14 @@ class SubsMailer < ApplicationMailer
   end
 
 
-  def answer_notification_email(email_sub_id, body)
-    email_sub = EmailSub.includes(:user).find(email_sub_id)
-    email = email_sub.user.email
+  def answer_notification_email(subscription_id, body)
+    subscription = Subscription.includes(:user).find(subscription_id)
+    email = subscription.user.email
     mail to: email,
          subject: 'New answer to subscribed question',
          body: body,
          content_type: 'text/html'
-    email_sub.update(sent_at: Time.now.utc)
+    subscription.update(sent_at: Time.now.utc)
   end
 
   def self.answer_notification_body(answer)

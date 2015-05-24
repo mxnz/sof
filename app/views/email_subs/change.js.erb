@@ -1,6 +1,0 @@
-<% if @email_sub.errors.blank? %>
-  $('.email_sub_wrapper').replaceWith("<%=j render 'email_subs/email_sub_wrapper', question: @email_sub.question %>");
-<% else %>
-  $('.email_sub_wrapper .error_messages_wrapper').
-    html("<%=j render 'shared/error_messages', target: @email_sub %>");
-<% end %>

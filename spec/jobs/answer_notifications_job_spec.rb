@@ -4,7 +4,7 @@ RSpec.describe AnswerNotificationsJob, type: :job do
   describe '.perform' do
     let!(:answer) { create(:answer) }
     let!(:question_author) { answer.question.user }
-    let!(:subscribed_user) { create(:email_sub, question: answer.question).user }
+    let!(:subscribed_user) { create(:subscription, question: answer.question).user }
     let!(:unsubscribed_user) { create(:user) }
     let(:perform_job) { AnswerNotificationsJob.perform_later(answer.id) }
 

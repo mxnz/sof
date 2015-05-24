@@ -51,18 +51,6 @@ ActiveRecord::Schema.define(version: 20150521144523) do
   add_index "comments", ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "email_subs", force: :cascade do |t|
-    t.integer  "user_id",     null: false
-    t.integer  "question_id"
-    t.datetime "sent_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "email_subs", ["question_id"], name: "index_email_subs_on_question_id", using: :btree
-  add_index "email_subs", ["user_id", "question_id"], name: "index_email_subs_on_user_id_and_question_id", unique: true, using: :btree
-  add_index "email_subs", ["user_id"], name: "index_email_subs_on_user_id", using: :btree
-
   create_table "identities", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "uid",          null: false
@@ -127,6 +115,18 @@ ActiveRecord::Schema.define(version: 20150521144523) do
 
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "question_id"
+    t.datetime "sent_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "subscriptions", ["question_id"], name: "index_subscriptions_on_question_id", using: :btree
+  add_index "subscriptions", ["user_id", "question_id"], name: "index_subscriptions_on_user_id_and_question_id", unique: true, using: :btree
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -163,9 +163,9 @@ ActiveRecord::Schema.define(version: 20150521144523) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
   add_foreign_key "comments", "users"
-  add_foreign_key "email_subs", "questions"
-  add_foreign_key "email_subs", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "questions", "users"
+  add_foreign_key "subscriptions", "questions"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "votes", "users"
 end

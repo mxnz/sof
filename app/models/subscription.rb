@@ -1,6 +1,6 @@
-class EmailSub < ActiveRecord::Base
-  belongs_to :user, inverse_of: :email_subs
-  belongs_to :question, inverse_of: :email_subs
+class Subscription < ActiveRecord::Base
+  belongs_to :user, inverse_of: :subscriptions
+  belongs_to :question, inverse_of: :subscriptions
 
   validates :user, presence: true
   validates :question_id, uniqueness: { scope: :user_id }

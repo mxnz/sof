@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :votes, dependent: :destroy, inverse_of: :user
   has_many :comments, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
-  has_many :email_subs, dependent: :delete_all, inverse_of: :user
+  has_many :subscriptions, dependent: :delete_all, inverse_of: :user
 
   after_create :subscribe_to_all_questions_digest
 
@@ -37,12 +37,12 @@ class User < ActiveRecord::Base
 
   def subscribed_to?(question)
     return false unless question.is_a? Question
-    email_sub_to(question).present?
+    subscription_to(question).present?
   end
 
-  def email_sub_to(question)
+  def subscription_to(question)
     return nil unless question.is_a? Question
-    email_subs.find { |es| es.question_id == question.id }
+    subscriptions.find { |es| es.question_id == question.id }
   end
 
   def self.from_omniauth(auth)
@@ -67,6 +67,6 @@ class User < ActiveRecord::Base
 
   private 
     def subscribe_to_all_questions_digest
-      self.email_subs.create(question: nil)
+      self.subscriptions.create(question: nil)
     end
 end

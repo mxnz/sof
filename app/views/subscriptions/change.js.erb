@@ -1,0 +1,6 @@
+<% if @subscription.errors.blank? %>
+  $('.subscription_wrapper').replaceWith("<%=j render 'subscriptions/subscription_wrapper', question: @subscription.question %>");
+<% else %>
+  $('.subscription_wrapper .error_messages_wrapper').
+    html("<%=j render 'shared/error_messages', target: @subscription %>");
+<% end %>
