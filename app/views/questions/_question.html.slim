@@ -6,4 +6,5 @@ div class="question"
   div class="question_controls"
     = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if can?(:edit, @question)
     div class="question_form_wrapper" 
+  = render 'subscriptions/subscription_wrapper', question: @question
   = render 'comments/comments_wrapper', commentable: question

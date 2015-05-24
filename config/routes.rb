@@ -1,4 +1,10 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   use_doorkeeper
   devise_for :users, controllers: { 
     omniauth_callbacks: 'omniauth_callbacks',
@@ -86,4 +92,5 @@ Rails.application.routes.draw do
   resources :identities, only: :show do
     get :confirm, on: :member
   end
+  resources :subscriptions, only: [:create, :destroy]
 end

@@ -6,6 +6,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'sidekiq/testing'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -60,8 +61,11 @@ RSpec.configure do |config|
 
   config.include ControllerMacros, type: :controller
 
+  config.include Capybara::Email::DSL, :type => :job
 end
 
 JsonSpec.configure do
   exclude_keys nil 
 end
+
+Sidekiq::Testing.inline!

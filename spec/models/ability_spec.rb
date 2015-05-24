@@ -28,6 +28,12 @@ RSpec.describe Ability, type: :model do
     let(:own_vote) { create(:vote, votable: other_question, user: user) }
     let(:other_vote) { create(:vote, votable: other_question) }
 
+    let(:subscription_to_unsubscribed_question) { build(:subscription, user: user, question: create(:question)) }
+    let(:subscription_to_subscribed_question) { build(:subscription, user: user, question: create(:subscription, user: user).question) }
+
+    let(:own_subscription_to_question) { create(:subscription, user: user) }
+    let(:other_subscription_to_question) { create(:subscription) }
+
 
     it_behaves_like 'a reader'
 
@@ -48,5 +54,11 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :destroy, own_vote }
     it { should_not be_able_to :destroy, other_vote }
+
+    it { should be_able_to :create, subscription_to_unsubscribed_question }
+    it { should_not be_able_to :create, subscription_to_subscribed_question }
+
+    it { should be_able_to :destroy, own_subscription_to_question }
+    it { should_not be_able_to :destroy, other_subscription_to_question }
   end
 end

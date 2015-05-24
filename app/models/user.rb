@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
   has_many :votes, dependent: :destroy, inverse_of: :user
   has_many :comments, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
+  has_many :subscriptions, dependent: :delete_all, inverse_of: :user
+
+  after_create :subscribe_to_all_questions_digest
 
   attr_accessor :without_password
 
@@ -32,6 +35,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def subscribed_to?(question)
+    return false unless question.is_a? Question
+    subscription_to(question).present?
+  end
+
+  def subscription_to(question)
+    return nil unless question.is_a? Question
+    subscriptions.find { |es| es.question_id == question.id }
+  end
+
   def self.from_omniauth(auth)
     identity = Identity.includes(:user).find_or_create_by(uid: auth.uid, provider: auth.provider)
     return identity.user if identity.user.present?
@@ -51,4 +64,9 @@ class User < ActiveRecord::Base
     user.identities << identity
     user
   end
+
+  private 
+    def subscribe_to_all_questions_digest
+      self.subscriptions.create(question: nil)
+    end
 end

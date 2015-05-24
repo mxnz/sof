@@ -23,7 +23,10 @@ RSpec.describe 'answers API', type: :request do
         end
 
         it "contains answers array for given question" do
-          expect(response.body).to be_json_eql(question_answers.to_json).at_path('answers')
+          expect(response.body).to have_json_size(question_answers.length).at_path('answers')
+          question_answers.each do |answer|
+            expect(response.body).to include_json(answer.to_json).at_path('answers')
+          end
         end
       end
 
