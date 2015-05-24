@@ -1,6 +1,6 @@
 require_relative 'features_helper'
 
-RSpec.feature 'Subscribe to question', %w{
+RSpec.feature 'Subscribe to question', %{
   In order to get email notifications
   As an authenticated user
   I want to be able to subscribe to question
@@ -16,10 +16,11 @@ RSpec.feature 'Subscribe to question', %w{
 
     expect(page).to have_content 'You subscribed to the question'
     expect(page).to_not have_selector(:link_or_button, 'Subscribe to the question')
+    expect(page).to have_selector(:link_or_button, 'Unsubscribe from the question')
   end
 
   scenario 'An unauthenticated user cannot subscribe to question' do  
     visit question_path(question)
-    expect(page).to_not have_link('Subscribe to the question')
+    expect(page).to_not have_selector(:link_or_button, 'Subscribe to the question')
   end
 end

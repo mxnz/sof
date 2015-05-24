@@ -37,7 +37,12 @@ class User < ActiveRecord::Base
 
   def subscribed_to?(question)
     return false unless question.is_a? Question
-    email_subs.any? { |es| es.question_id == question.id }
+    email_sub_to(question).present?
+  end
+
+  def email_sub_to(question)
+    return nil unless question.is_a? Question
+    email_subs.find { |es| es.question_id == question.id }
   end
 
   def self.from_omniauth(auth)

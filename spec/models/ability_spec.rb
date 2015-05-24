@@ -31,6 +31,9 @@ RSpec.describe Ability, type: :model do
     let(:email_sub_to_unsubscribed_question) { build(:email_sub, user: user, question: create(:question)) }
     let(:email_sub_to_subscribed_question) { build(:email_sub, user: user, question: create(:email_sub, user: user).question) }
 
+    let(:own_email_sub_to_question) { create(:email_sub, user: user) }
+    let(:other_email_sub_to_question) { create(:email_sub) }
+
 
     it_behaves_like 'a reader'
 
@@ -54,5 +57,8 @@ RSpec.describe Ability, type: :model do
 
     it { should be_able_to :create, email_sub_to_unsubscribed_question }
     it { should_not be_able_to :create, email_sub_to_subscribed_question }
+
+    it { should be_able_to :destroy, own_email_sub_to_question }
+    it { should_not be_able_to :destroy, other_email_sub_to_question }
   end
 end

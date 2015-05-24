@@ -27,5 +27,6 @@ class Ability
     can :create, EmailSub do |email_sub|
       !@user.subscribed_to?(email_sub.question)
     end
+    can :destroy, EmailSub, user_id: @user.id
   end
 end
