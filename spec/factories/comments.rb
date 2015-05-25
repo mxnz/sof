@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :comment do
-    sequence(:body) { |n| "Comment ##{n}" }
+    sequence(:body) { |n| "Comment_##{n}" }
     commentable nil
     user
   end

@@ -1,0 +1,5 @@
+ul class="questions"
+  - questions.each do |question|
+    li id="question_#{question.id}"
+      h2 = link_to question.title, question
+      = link_to 'Delete', question, method: :delete, remote: true if can?(:destroy, question) 

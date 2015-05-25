@@ -28,5 +28,4 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Dir.glob('public/uploads/*'))
     DatabaseCleaner.clean
   end
-
 end
