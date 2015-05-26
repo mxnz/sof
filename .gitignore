@@ -18,3 +18,5 @@ config/private_pub.yml
 .*.swp
 public/uploads
 dump.rdb
+config/*.sphinx.conf
+db/sphinx

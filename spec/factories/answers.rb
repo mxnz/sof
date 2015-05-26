@@ -3,7 +3,7 @@ FactoryGirl.define do
   factory :answer do
     user
     question
-    sequence(:body) { |n| "Answer ##{n}" }
+    sequence(:body) { |n| "Answer_##{n}" }
     best false
   end
 

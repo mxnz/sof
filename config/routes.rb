@@ -93,4 +93,6 @@ Rails.application.routes.draw do
     get :confirm, on: :member
   end
   resources :subscriptions, only: [:create, :destroy]
+
+  get 'search', to: 'search#index', as: 'search'
 end

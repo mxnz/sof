@@ -1,10 +1,7 @@
+= render 'search/form'
 h1 Questions
-ul class="questions"
-  - @questions.each do |question|
-    li id="question_#{question.id}"
-      h2 = link_to question.title, question
-      = link_to 'Delete', question, method: :delete, remote: true if can?(:destroy, question) 
-
+= render 'question_titles', questions: @questions
+ 
 = subscribe_to "/questions"
 
 script type="text/template" id="question_template"
