@@ -2,9 +2,9 @@ require_relative 'features_helper'
 
 RSpec.feature 'Search', %{
   In order to find required question
-  An a user
+  As a user
   I want to be able to perform full-text search
-}, type: :feature, js: true do
+}, type: :feature, js: true, focus: true do
 
   given!(:question1) { create(:question, body: 'aaa') }
   given!(:question2) { create(:question, body: 'bbb') }

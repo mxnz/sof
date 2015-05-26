@@ -23,14 +23,14 @@ class QuestionSearcher
   private
     
     def self.search_everywhere(query)
-      Question.search(query)
+      Question.search(query, index: 'full_questions_index_core')
     end
 
     def self.search_in_questions(query)
-      Question.search("@title #{query} | @body #{query} | @author #{query}")
+      Question.search(query)
     end
 
     def self.search_in_other_domain(query, condition)
-      Question.search(conditions: { condition => query })
+      Question.search(index: 'full_questions_index_core', conditions: { condition => query })
     end
 end
