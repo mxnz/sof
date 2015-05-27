@@ -23,3 +23,7 @@
 every :day, at: '5am' do
   runner 'QuestionsDigestJob.perform_later'
 end
+
+every :hour do
+  rake 'ts:index'
+end
