@@ -70,6 +70,8 @@ gem 'thinking-sphinx'
 gem 'dotenv'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
+gem 'therubyracer'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
