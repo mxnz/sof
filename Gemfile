@@ -67,6 +67,9 @@ gem 'mysql2'
 
 gem 'thinking-sphinx'
 
+gem 'dotenv'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -96,6 +99,11 @@ end
 
 group :development do
   gem 'foreman', require: false
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-passenger', require: false
 end
 
 group :test do
