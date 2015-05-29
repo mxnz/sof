@@ -42,7 +42,7 @@ class QuestionsController < ApplicationController
     def load_question
       case action_name
         when 'show'
-          @question = Question.includes(:attachments, :comments, answers: [:attachments]).find(params[:id])
+          @question = Question.includes(:attachments, :comments).find(params[:id])
         when 'update'
           @question = Question.includes(:user, :attachments).find(params[:id])
         when 'destroy'

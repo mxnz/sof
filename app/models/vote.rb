@@ -1,6 +1,6 @@
 class Vote < ActiveRecord::Base
   belongs_to :user, inverse_of: :votes
-  belongs_to :votable, polymorphic: true
+  belongs_to :votable, polymorphic: true, touch: true
 
   attr_readonly :up
 

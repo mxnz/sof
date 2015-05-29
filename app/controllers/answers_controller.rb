@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
   respond_to :json
 
   def index
-    respond_with(@question.answers, partial: 'answers', locals: { answers: @question.answers })
+    respond_with(@question.answers, partial: 'answers', locals: { question: @question })
   end
 
   def create
@@ -74,7 +74,7 @@ class AnswersController < ApplicationController
 
     def publish_answers
       return if @answer.errors.present?
-      answers = render_to_string partial: 'answers', formats: [:json], locals: { answers: @question.answers }
+      answers = render_to_string partial: 'answers', formats: [:json], locals: { question: @question }
       PrivatePub.publish_to "/questions/#{@question.id}", answers: answers
     end
 end

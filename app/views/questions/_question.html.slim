@@ -1,10 +1,15 @@
 div class="question"
-  h1 = question.title
-  div class="question_body" = question.body
-  ul class="attachments" = render question.attachments
+
+  - cache ['question_attributes', question] do
+    h1 = question.title
+    div class="question_body" = question.body
+    ul class="attachments" = render question.attachments
+
   div class="votable_wrapper" = render 'votes/votable', votable: question
   div class="question_controls"
     = link_to('Edit Question', '#', data: { action: 'edit_question', form: "#{render('form', question: question)}" }) if can?(:edit, @question)
     div class="question_form_wrapper" 
   = render 'subscriptions/subscription_wrapper', question: @question
-  = render 'comments/comments_wrapper', commentable: question
+
+  - cache_unless(user_signed_in?, ['question_comments', question]) do
+    = render 'comments/comments_wrapper', commentable: question

@@ -1,16 +1,18 @@
-= render "answers/attachment_blueprint"
-= render @question    
-script type="text/template" id="answer_form_template"
-  = render 'answers/form', question: @question 
-script type="text/template" id="answer_template"
-  = render 'answers/answer'
-script type="text/template" id="answers_template"
-  = render 'answers/answers'
-script type="text/template" id="error_messages_template"
-  = render 'answers/error_messages'
-div class="new_answer_wrapper"
-h2 Answers
-div class="answers_wrapper" data-question_answers_path="#{question_answers_path(@question)}"
+- cache_unless(user_signed_in?, @question) do
+  = render "answers/attachment_blueprint"
+  = render @question    
+  script type="text/template" id="answer_form_template"
+    = render 'answers/form', question: @question 
+  script type="text/template" id="answer_template"
+    = render 'answers/answer'
+  script type="text/template" id="answers_template"
+    = render 'answers/answers'
+  script type="text/template" id="error_messages_template"
+    = render 'answers/error_messages'
+  div class="new_answer_wrapper"
+  h2 Answers
+  div class="answers_wrapper" data-question_answers_path="#{question_answers_path(@question)}"
+
 script[type="text/data" id="app_data"
   data-question_id="#{ @question.id }"
   data-question_user_id="#{ @question.user_id }"
