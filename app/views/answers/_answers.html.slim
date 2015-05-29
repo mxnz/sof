@@ -2,5 +2,5 @@
   ul class="answers"
     <% _.forEach(answers, function(answer) { %>
       li
-        <%= answer_template( { answer: answer }) %>
+        <%= answer_template( { answer: answer, curUser: curUser }) %>
     <% }); %>

@@ -1,6 +1,8 @@
 - cache 'comments_wrapper' do
   div class="comments_wrapper"
-    = link_to 'Add Comment', '#', data: { action: 'new_comment' }
+    <% if (answer.id && curUser.id) { %>
+      = link_to 'Add Comment', '#', data: { action: 'new_comment' }
+    <% } %>
     = render 'answers/comment_form'
     h3 Comments
     ul class="comments"

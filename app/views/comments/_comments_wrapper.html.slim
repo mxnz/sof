@@ -1,5 +1,6 @@
 div class="comments_wrapper"
-  = link_to 'Add Comment', '#', data: { action: 'new_comment' }
+  - if can?(:create, Comment)
+    = link_to 'Add Comment', '#', data: { action: 'new_comment' }
   = render 'comments/form', comment: Comment.new(commentable: commentable)
   h3 Comments
   ul class="comments"

@@ -134,14 +134,14 @@ $(function() {
     if (!answer) {
       answer = $("#answer_new").data('answer');
     }
-    var answerHtml = this._answer_template({ answer: answer });
+    var answerHtml = this._answer_template({ answer: answer, curUser: this._curUser });
     var answerId = "#answer_" + (answer.id || "new");
     $(answerId).replaceWith(answerHtml);
     $(answerId).data('answer', answer);
   };
 
   AnswerList.prototype.showAnswers = function(answers) {
-    this._answersWrapper.html(this._answers_template( { answers: answers, answer_template: this._answer_template } ));
+    this._answersWrapper.html(this._answers_template( { answers: answers, curUser: this._curUser, answer_template: this._answer_template } ));
     _.forEach(answers, function(answer) {
       $("#answer_" + answer.id).data('answer', answer);
     });
