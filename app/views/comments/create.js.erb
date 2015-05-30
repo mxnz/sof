@@ -1,11 +1,15 @@
 <% if @comment.errors.blank? %>
   <% publish_to "/questions/#{ @comment.question_id }" do %>
+    var comment = $("<%=j render @comment %>")
+    if ($('#app_data').data('cur_user_id') !== <%= @comment.user_id %>) {
+      comment.find('a[data-method="delete"]').remove();
+    }
     <% if @comment.commentable_type == 'Question' %>
       var comments = $(".question .comments");
     <% elsif @comment.commentable_type == 'Answer' %>
       var comments = $("#answer_<%= @comment.commentable_id %> .comments");
     <% end %>
-    comments.append("<%=j render @comment %>");
+    comments.append(comment);
     var comments_wrapper = comments.closest('.comments_wrapper');
     comments_wrapper.find('[data-action="new_comment"]').show();
     var new_comment_form = comments_wrapper.find('form.new_comment');

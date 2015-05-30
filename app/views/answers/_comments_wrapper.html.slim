@@ -1,16 +1,18 @@
 - cache 'comments_wrapper' do
-  div class="comments_wrapper"
-    <% if (answer.id && curUser.id) { %>
-      = link_to 'Add Comment', '#', data: { action: 'new_comment' }
-    <% } %>
-    = render 'answers/comment_form'
-    h3 Comments
-    ul class="comments"
-      <% _.forEach(answer.comments, function(comment) { %>
-        li
-          div class="comment" id="#{'comment_<%= comment.id %>'.html_safe}"
-            p <%= comment.body %>
-            <% if (comment.belongs_to_cur_user) { %>
-              == jst link_to('Remove Comment', comment_path("<%= comment.id %>"), method: :delete, remote: true)
-            <% } %>
-      <% }); %>
+  <% if (answer.id) { %>
+    div class="comments_wrapper"
+      <% if (curUser.id) { %>
+        = link_to 'Add Comment', '#', data: { action: 'new_comment' }
+      <% } %>
+      = render 'answers/comment_form'
+      h3 Comments
+      ul class="comments"
+        <% _.forEach(answer.comments, function(comment) { %>
+          li
+            div class="comment" id="#{'comment_<%= comment.id %>'.html_safe}"
+              p <%= comment.body %>
+              <% if (comment.belongs_to_cur_user) { %>
+                == jst link_to('Remove Comment', comment_path("<%= comment.id %>"), method: :delete, remote: true)
+              <% } %>
+        <% }); %>
+  <% } %>

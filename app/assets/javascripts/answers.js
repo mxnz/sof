@@ -244,6 +244,7 @@ $(function() {
     var channelId = "/questions/" + questionId;
 
     PrivatePub.subscribe(channelId, function(data, channel) {
+      if (!data) return;
       if (data.answer) {
         var answer = $.parseJSON(data.answer);
         if (answer.destroyed) {
