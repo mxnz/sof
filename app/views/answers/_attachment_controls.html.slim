@@ -1,19 +1,20 @@
-div class="attachment_controls"
-  <% for (var i = 0; i < answer.attachments.length; i++) { %>
-    <% var attachment = answer.attachments[i]; %>
-  = form.fields_for :attachments do |a|
+- cache 'attachment_controls' do
+  div class="attachment_controls"
+    <% for (var i = 0; i < answer.attachments.length; i++) { %>
+      <% var attachment = answer.attachments[i]; %>
+    = form.fields_for :attachments do |a|
 
-    <% if (attachment.id) { %>
-      div class="attachment_in_form" == "<%= attachment.file.identifier %>"
-    <% } else { %>
-      div class="field"
-        = a.label :file
-        = a.file_field :file
+      <% if (attachment.id) { %>
+        div class="attachment_in_form" == "<%= attachment.file.identifier %>"
+      <% } else { %>
+        div class="field"
+          = a.label :file
+          = a.file_field :file
+      <% } %>
+
+      input type="hidden" value="false" name=='answer[attachments_attributes][<%= i %>][_destroy]' id=='answer_attachments_attributes_<%= i %>__destroy'
+      a class="remove_nested_fields" data-association="attachments" href="javascript:void(0)" Remove file
+      input type="hidden" value=='<%= attachment.id %>' name=='answer[attachments_attributes][<%= i %>][id]' id=='answer_attachments_attributes_<%= i %>_id'
+
     <% } %>
-
-    input type="hidden" value="false" name=='answer[attachments_attributes][<%= i %>][_destroy]' id=='answer_attachments_attributes_<%= i %>__destroy'
-    a class="remove_nested_fields" data-association="attachments" href="javascript:void(0)" Remove file
-    input type="hidden" value=='<%= attachment.id %>' name=='answer[attachments_attributes][<%= i %>][id]' id=='answer_attachments_attributes_<%= i %>_id'
-
-  <% } %>
-  = form.link_to_add 'Attach file', :attachments
+    = form.link_to_add 'Attach file', :attachments

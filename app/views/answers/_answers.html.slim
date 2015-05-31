@@ -1,5 +1,6 @@
-ul class="answers"
-  <% _.forEach(answers, function(answer) { %>
-    li
-      <%= answer_template( { answer: answer }) %>
-  <% }); %>
+- cache 'answers' do
+  ul class="answers"
+    <% _.forEach(answers, function(answer) { %>
+      li
+        <%= answer_template( { answer: answer, curUser: curUser }) %>
+    <% }); %>

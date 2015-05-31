@@ -3,7 +3,7 @@ class Answer < ActiveRecord::Base
   include Votable
 
   belongs_to :user, inverse_of: :answers
-  belongs_to :question, inverse_of: :answers
+  belongs_to :question, inverse_of: :answers, touch: true
 
   has_many :comments, as: :commentable, dependent: :destroy
 

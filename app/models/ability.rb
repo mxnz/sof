@@ -16,6 +16,7 @@ class Ability
 
   def user_abilities
     guest_abilities
+    can :create, [Question, Answer, Comment] { true }
     can :manage, [Question, Answer, Comment], user_id: @user.id
     can :update_best, Answer do |answer|
       @user.owns?(answer.question)
