@@ -6,7 +6,8 @@ class QuestionsController < ApplicationController
 
   authorize_resource
 
-  respond_to :html, :js
+  respond_to :html, except: :update
+  respond_to :js, only: [:update]
 
 
   def index
@@ -30,7 +31,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    respond_with(@question.destroy!)
+    @question.destroy!
+    respond_to do |format|
+      format.html { respond_with(@question) }
+      format.js
+    end
   end
 
 
