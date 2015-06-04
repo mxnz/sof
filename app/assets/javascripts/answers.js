@@ -220,6 +220,8 @@ $(function() {
   };
    
   AnswerListener.prototype._initAnswers = function() {
+    if (!this._answerList.answersPath()) return;
+
     $.getJSON(
       this._answerList.answersPath()
     ).done(function(answers) {
